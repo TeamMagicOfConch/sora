@@ -6,7 +6,11 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ResponseCode {
 
-    SUCCESS(200, "GEN-000", HttpStatus.OK, "Success");
+    //General exception
+    SUCCESS(200, "GEN-000", HttpStatus.OK, "Success"),
+
+    //Validation exception response
+    ARGUMENT_NOT_VALID(400, "VAL-001", HttpStatus.BAD_REQUEST, "Argument not valid");
 
     private final Integer status;
     private final String code;
