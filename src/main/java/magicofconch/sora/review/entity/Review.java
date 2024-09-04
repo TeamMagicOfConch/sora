@@ -21,7 +21,7 @@ public class Review {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userinfo_id", insertable = false, updatable = false)
+	@JoinColumn(name = "userinfo_id")
 	private UserInfo userInfo;
 
 	@Enumerated(EnumType.STRING)
