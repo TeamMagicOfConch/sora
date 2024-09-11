@@ -17,7 +17,7 @@ import magicofconch.sora.review.entity.Review;
 @Entity
 public class UserInfo {
     @Id
-    @Column(name = "userInfo_id")
+    @Column(name = "user_info_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -26,7 +26,10 @@ public class UserInfo {
     private List<Review> reviews = new ArrayList<Review>();
     private String uuid;
     private String socialId;
-    private String mobileOsId;
-    private String desktopOsId;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_info_id")
+    private List<OsAuthInfo> osAuthInfo = new ArrayList<OsAuthInfo>();
+
     private Integer initialReviewCount;
 }
