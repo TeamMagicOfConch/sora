@@ -30,7 +30,7 @@ public class ReviewService {
 	 * @return : 소라 응답
 	 */
 	public String requestSora(SoraReviewReq req){
-		Message userMessage = new UserMessage(req.getMyReview());
+		Message userMessage = new UserMessage(req.getMyWrite());
 		SystemPromptTemplate systemPromptTemplate;
 		ReviewType requestType = req.getType();
 
@@ -47,7 +47,4 @@ public class ReviewService {
 
 		return response;
 	}
-
-
-
 }

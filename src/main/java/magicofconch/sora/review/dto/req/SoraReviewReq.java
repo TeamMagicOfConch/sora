@@ -5,6 +5,6 @@ import magicofconch.sora.review.enums.ReviewType;
 
 @Getter
 public class SoraReviewReq {
-	private String myReview;
+	private String myWrite;
 	private ReviewType type;
 }
