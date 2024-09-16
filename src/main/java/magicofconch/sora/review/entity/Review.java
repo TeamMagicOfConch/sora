@@ -10,11 +10,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import magicofconch.sora.review.enums.ReviewType;
+import magicofconch.sora.review.enums.FeedbackType;
 import magicofconch.sora.user.entity.UserInfo;
+import magicofconch.sora.util.BaseEntity;
 
 @Entity
-public class Review {
+public class Review extends BaseEntity {
 	@Id
 	@Column(name = "review_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +26,11 @@ public class Review {
 	private UserInfo userInfo;
 
 	@Enumerated(EnumType.STRING)
-	private ReviewType type;
+	private FeedbackType feedbackType;
 
 	@Column(columnDefinition = "TEXT", nullable = false)
-	private String myWrite;
+	private String body;
 
 	@Column(columnDefinition = "TEXT", nullable = false)
-	private String conchWrite;
+	private String feedback;
 }
