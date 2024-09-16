@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import magicofconch.sora.review.dto.req.SoraReviewReq;
-import magicofconch.sora.review.enums.ReviewType;
+import magicofconch.sora.review.enums.FeedbackType;
 
 @Service
 @RequiredArgsConstructor
@@ -30,19 +30,21 @@ public class ReviewService {
 	 * @return : 소라 응답
 	 */
 	public String requestSora(SoraReviewReq req){
-		Message userMessage = new UserMessage(req.getMyWrite());
+		Message userMessage = new UserMessage(req.getBody());
 		SystemPromptTemplate systemPromptTemplate;
-		ReviewType requestType = req.getType();
+		FeedbackType requestType = req.getType();
 
-		if(requestType.equals(ReviewType.F)){
+		if(requestType.equals(FeedbackType.FEELING)){
 			systemPromptTemplate = new SystemPromptTemplate(promptAsF);
 		}
 		else{
 			systemPromptTemplate = new SystemPromptTemplate(promptAsT);
 		}
 
-		//todo : context에서 user이름으로 조회 추가하기
-		Message systemMessage = systemPromptTemplate.createMessage(Map.of("name", "test_name"));
+		// note : 추후 유저 이름 반영을 위해
+		//Message systemMessage = systemPromptTemplate.createMessage(Map.of("name", "test_name"));
+
+		Message systemMessage = systemPromptTemplate.createMessage();
 		String response = openAiChatModel.call(userMessage, systemMessage);
 
 		return response;
