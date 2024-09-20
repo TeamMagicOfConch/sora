@@ -1,6 +1,11 @@
 package magicofconch.sora.review.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -10,9 +15,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import magicofconch.sora.review.dto.req.SoraReviewReq;
 import magicofconch.sora.review.enums.FeedbackType;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
@@ -29,7 +38,7 @@ public class ReviewService {
 	 * @param req : 소라 회고 리뷰 요청
 	 * @return : 소라 응답
 	 */
-	public String requestSora(SoraReviewReq req){
+	public Flux<String> requestSora(SoraReviewReq req){
 		Message userMessage = new UserMessage(req.getBody());
 		SystemPromptTemplate systemPromptTemplate;
 		FeedbackType requestType = req.getType();
@@ -45,8 +54,25 @@ public class ReviewService {
 		//Message systemMessage = systemPromptTemplate.createMessage(Map.of("name", "test_name"));
 
 		Message systemMessage = systemPromptTemplate.createMessage();
-		String response = openAiChatModel.call(userMessage, systemMessage);
 
-		return response;
+		// 전체 응답을 저장할 StringBuilder
+		AtomicReference<StringBuilder> fullResponse = new AtomicReference<>(new StringBuilder());
+
+		return openAiChatModel.stream(userMessage, systemMessage)
+			.map(response -> {
+				// 응답을 실시간으로 클라이언트로 전송
+				fullResponse.get().append(response);  // 전체 응답 누적
+				return response;  // 클라이언트로 전송
+			})
+			.doOnComplete(() -> {
+				// 스트림 완료 시 누적된 응답을 데이터베이스에 저장
+				saveToDatabase(fullResponse.get().toString()).subscribe();
+			});
+	}
+
+	private Mono<Void> saveToDatabase(String fullResponse) {
+		// DB 저장 로직
+		log.info("ReviewService savetoDatabse = {}", fullResponse);
+		return Mono.empty();
 	}
 }
