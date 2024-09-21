@@ -59,15 +59,14 @@ public class ReviewService {
 		AtomicReference<StringBuilder> fullResponse = new AtomicReference<>(new StringBuilder());
 
 		return openAiChatModel.stream(userMessage, systemMessage)
-			.map(response -> {
-				// 응답을 실시간으로 클라이언트로 전송
-				fullResponse.get().append(response);  // 전체 응답 누적
-				return response;  // 클라이언트로 전송
+			.doOnNext(response -> {
+				fullResponse.get().append(response); // 전체 응답 누적
 			})
 			.doOnComplete(() -> {
 				// 스트림 완료 시 누적된 응답을 데이터베이스에 저장
 				saveToDatabase(fullResponse.get().toString()).subscribe();
 			});
+
 	}
 
 	private Mono<Void> saveToDatabase(String fullResponse) {
