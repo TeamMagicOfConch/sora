@@ -14,13 +14,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import magicofconch.sora.user.enums.OsType;
 import magicofconch.sora.util.BaseEntity;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "users", uniqueConstraints = {
+@Table(name = "os_auth_info", uniqueConstraints = {
 	@UniqueConstraint(
 		name = "os_id_unique",
 		columnNames = "os_auth_info_id"
@@ -37,12 +36,12 @@ public class OsAuthInfo extends BaseEntity {
 	@JoinColumn(name = "user_info_id", insertable = false, updatable = false)
 	private UserInfo userInfo;
 
-	private String identifier;
+	private String osId;
 	private String osType;
 
 	@Builder
-	public OsAuthInfo(String identifier, String osType){
-		this.identifier = identifier;
+	public OsAuthInfo(String osId, String osType){
+		this.osId = osId;
 		this.osType = osType;
 	}
 }
