@@ -28,7 +28,7 @@ public class UserInfo extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "review_id")
     private List<Review> reviews = new ArrayList<Review>();
     private String uuid;
