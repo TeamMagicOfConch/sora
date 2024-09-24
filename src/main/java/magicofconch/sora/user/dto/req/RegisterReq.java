@@ -7,6 +7,6 @@ import magicofconch.sora.user.enums.OsType;
 @Data
 @NoArgsConstructor
 public class RegisterReq {
-	private String identifier;
+	private String osId;
 	private String osType;
 }
