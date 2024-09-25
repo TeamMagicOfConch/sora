@@ -20,7 +20,7 @@ public class SecurityController {
 
 	private final AuthService authService;
 
-	@PostMapping("/login")
+	@PostMapping("/user/login")
 	public Response<TokenDto>  login(@RequestBody LoginReq req){
 		TokenDto tokenDto = authService.login(req);
 

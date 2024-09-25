@@ -15,7 +15,7 @@ import magicofconch.sora.util.Response;
 public class RefreshController {
 	private final RefreshTokenService refreshTokenService;
 
-	@PostMapping("/reissue")
+	@PostMapping("/user/reissue")
 	public Response<TokenDto> reissue(HttpServletRequest httpServletRequest){
 		TokenDto tokenDto = refreshTokenService.reissue(httpServletRequest);
 

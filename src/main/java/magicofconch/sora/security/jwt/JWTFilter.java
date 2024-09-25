@@ -32,11 +32,8 @@ public class JWTFilter extends OncePerRequestFilter {
 	private final String BEARER_PREFIX = "Bearer ";
 
 	private final List<String> WHITE_LIST = List.of(
-		"/login",
-		"/register",
-		"/test",
-		"/auth",
-		"/reissue"
+		"/user",
+		"/test/api"
 	);
 
 	@Override

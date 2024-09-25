@@ -17,7 +17,7 @@ public class UserController {
 	private final UserService userService;
 
 
-	@PostMapping("/register")
+	@PostMapping("/user/register")
 	public Response<RegisterRes> registerUser(@RequestBody  RegisterReq registerReq){
 		RegisterRes res = userService.registerUser(registerReq);
 
