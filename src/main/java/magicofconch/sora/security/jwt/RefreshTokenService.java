@@ -3,8 +3,6 @@ package magicofconch.sora.security.jwt;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.JwtException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import magicofconch.sora.security.dto.res.TokenDto;
@@ -28,12 +26,10 @@ public class RefreshTokenService {
 
 	/**
 	 * reissue access-token with refresh-token
-	 * todo : RTR 구현
-	 *     -> todo : RTR 구현시 blackList도 구현
+	 * todo : RTR 구현 / RTR 구현시 blackList도 구현 필요
 	 * @return new access token and refresh token(RTR)
 	 */
-	public TokenDto reissue(HttpServletRequest request){
-		String refreshToken = request.getHeader("Refresh-Token");
+	public TokenDto reissue(String refreshToken){
 
 		log.info("[RefreshTokenService - reissue] refresh token = {}", refreshToken);
 		if(refreshToken == null){ new BusinessException(ResponseCode.NO_REFRESH_TOKEN); }
