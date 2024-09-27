@@ -6,7 +6,7 @@ build/
 !**/src/test/**/build/
 
 ### profile ###
-/src/main/resources/application*
+/src/main/resources/application.yaml
 /Dockerfile
 /docker-compose.yml
 /my.cnf
