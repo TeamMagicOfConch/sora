@@ -14,7 +14,6 @@ public class UserDto {
 	private String role;
 
 	public static UserDto fromUserInfo(UserInfo userInfo, String osId){
-		log.info("[UserDto fromUserInfo] - userInfo.getRole ={}, userInfo.getUuid={} ", userInfo.getRole(), userInfo.getUuid());
 		return UserDto.builder()
 			.uuid(userInfo.getUuid())
 			.role(userInfo.getRole())

@@ -1,4 +1,4 @@
-package magicofconch.sora.user.dto.res;
+package magicofconch.sora.security.dto.res;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

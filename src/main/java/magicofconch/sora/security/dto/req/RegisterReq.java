@@ -1,4 +1,4 @@
-package magicofconch.sora.user.dto.req;
+package magicofconch.sora.security.dto.req;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

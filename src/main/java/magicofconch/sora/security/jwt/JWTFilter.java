@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -32,8 +34,8 @@ public class JWTFilter extends OncePerRequestFilter {
 	private final String BEARER_PREFIX = "Bearer ";
 
 	private final List<String> WHITE_LIST = List.of(
-		"/user",
-		"/test/api"
+		"/test",
+		"/user"
 	);
 
 	@Override
@@ -48,7 +50,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
 		String accessToken = resolveAccessToken(request);
 
-		log.info("[JWTFilter - doFilterInternal] accessToken = {}", accessToken);
 		try{
 			jwtUtil.isExpired(accessToken);
 
@@ -60,14 +61,11 @@ public class JWTFilter extends OncePerRequestFilter {
 
 			//response status code
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			log.info("[JWTFilter - doFilterInternal] token is expired");
 			return;
 		}
 
-		log.info("[JWTFilter - doFilterInternal] token is valid");
 		String uuid = jwtUtil.getUUID(accessToken);
 		String role = jwtUtil.getRole(accessToken);
-		log.info("[JWTFilter - doFilterInternal] uuid = {}, role ={}", uuid, role);
 
 
 		UserDto userDto = UserDto.builder()

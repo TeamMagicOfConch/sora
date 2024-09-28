@@ -27,7 +27,6 @@ public class OsIdUserDetailService implements UserDetailsService {
 			.orElseThrow(() -> new UsernameNotFoundException("없는 os_id 입니다"));
 
 		CustomUserDetails userDetails = new CustomUserDetails(UserDto.fromUserInfo(osAuthInfo.getUserInfo(), osAuthInfo.getOsId()));
-		log.info("OsIdUserDetailService - loadUserByUsername] userDetails role = {}", userDetails.getAuthorities());
 
 		return userDetails;
 	}

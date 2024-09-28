@@ -55,7 +55,6 @@ public class ReviewService {
 
 		Message systemMessage = systemPromptTemplate.createMessage();
 
-		// 전체 응답을 저장할 StringBuilder
 		AtomicReference<StringBuilder> fullResponse = new AtomicReference<>(new StringBuilder());
 
 		return openAiChatModel.stream(userMessage, systemMessage)
