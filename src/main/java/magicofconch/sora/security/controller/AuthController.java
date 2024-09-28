@@ -45,6 +45,12 @@ public class AuthController {
 		return Response.ok(tokenDto);
 	}
 
+	@DeleteMapping("/auth/user/delete")
+	public Response<Void> delete(){
+		authService.delete();
+		return Response.ok();
+	}
+
 	@GetMapping("/isthiswork")
 	public Response okok (){
 		return Response.ok();

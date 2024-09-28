@@ -20,7 +20,6 @@ public class OsIdAuthenticationProvider implements AuthenticationProvider {
 		String osId = (String) authentication.getPrincipal();
 
 		CustomUserDetails userDetails =  osIdUserDetailService.loadUserByUsername(osId);
-		log.info("OsIdAuthenticationProvider - authenticate] osAuthInfo.getUserInfo.getUuid() = {}", userDetails.getUuid());
 
 		OsIdAuthenticationToken osIdAuthenticationToken = new OsIdAuthenticationToken(userDetails, userDetails.getAuthorities());
 		osIdAuthenticationToken.setDetails(userDetails);

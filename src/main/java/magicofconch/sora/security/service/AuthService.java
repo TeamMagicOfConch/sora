@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import magicofconch.sora.security.dto.req.LoginReq;
@@ -18,6 +19,7 @@ import magicofconch.sora.user.enums.UserRole;
 import magicofconch.sora.user.repository.OsAuthInfoRepository;
 import magicofconch.sora.user.repository.UserInfoRepository;
 import magicofconch.sora.util.ResponseCode;
+import magicofconch.sora.util.SecurityUtil;
 import magicofconch.sora.util.exception.BusinessException;
 
 @Service
@@ -28,6 +30,7 @@ public class AuthService {
 	private final UserInfoRepository userInfoRepository;
 	private final OsAuthInfoRepository osAuthInfoRepository;
 	private final JwtUtil jwtUtil;
+	private final SecurityUtil securityUtil;
 
 	public RegisterRes registerUser(RegisterReq registerReq){
 
@@ -65,5 +68,11 @@ public class AuthService {
 
 		return jwtUtil.generateTokenDto(osIdAuthenticationToken);
 
+	}
+
+	@Transactional
+	public void delete(){
+		UserInfo user = securityUtil.getCurrentUsersEntity();
+		userInfoRepository.delete(user);
 	}
 }
