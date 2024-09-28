@@ -75,7 +75,7 @@ public class OsIdAuthenticationFilter extends AbstractAuthenticationProcessingFi
 		throws IOException, ServletException {
 		log.info("[OsIdAuthenticationFilter - successfulAuthentication] - string={}", authResult.getPrincipal());
 		CustomUserDetails userDetails = (CustomUserDetails) authResult.getDetails();
-		String uuid = userDetails.getUuid();  // UUID를 사용자 이름으로 사용한다고 가정
+		String uuid = userDetails.getUuid();
 
 		String accessToken = jwtUtil.generateAccessToken(uuid, UserRole.ROLE_USER.getRoleName());
 		String refreshToken = jwtUtil.generateRefreshToken(uuid, UserRole.ROLE_USER.getRoleName());
