@@ -10,6 +10,7 @@ build/
 /Dockerfile
 /docker-compose.yml
 /my.cnf
+/.env
 
 ### STS ###
 .apt_generated
@@ -41,3 +42,4 @@ out/
 
 ### VS Code ###
 .vscode/
+
