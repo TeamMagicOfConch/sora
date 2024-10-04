@@ -31,7 +31,6 @@ public class RefreshTokenService {
 	 */
 	public TokenDto reissue(String refreshToken){
 
-		log.info("[RefreshTokenService - reissue] refresh token = {}", refreshToken);
 		if(refreshToken == null){ new BusinessException(ResponseCode.NO_REFRESH_TOKEN); }
 
 		try{
@@ -43,8 +42,6 @@ public class RefreshTokenService {
 
 		UserInfo userInfo = userInfoRepository.findUserInfoByUuid(jwtUtil.getUUID(refreshToken))
 			.orElseThrow(() -> new BusinessException(ResponseCode.USER_NOT_FOUND));
-
-		log.info("[RefreshTokenService - reissue] security context -> userInfo.getUuid = {}", userInfo.getUuid());
 
 		String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), userInfo.getRole());
 

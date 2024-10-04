@@ -10,6 +10,8 @@ import magicofconch.sora.security.CustomUserDetails;
 import magicofconch.sora.security.UserDto;
 import magicofconch.sora.user.entity.OsAuthInfo;
 import magicofconch.sora.user.repository.OsAuthInfoRepository;
+import magicofconch.sora.util.ResponseCode;
+import magicofconch.sora.util.exception.BusinessException;
 import magicofconch.sora.util.exception.RedirectException;
 
 @Slf4j
@@ -25,7 +27,7 @@ public class OsIdUserDetailService implements UserDetailsService {
 	public CustomUserDetails loadUserByUsername(String osId) throws UsernameNotFoundException {
 
 		OsAuthInfo osAuthInfo = osAuthInfoRepository.findOsAuthInfoByOsId(osId)
-			.orElseThrow(() -> new RedirectException("/user/register"));
+			.orElseThrow(() -> new BusinessException(ResponseCode.LOGIN_FAIL));
 
 		CustomUserDetails userDetails = new CustomUserDetails(UserDto.fromUserInfo(osAuthInfo.getUserInfo(), osAuthInfo.getOsId()));
 
