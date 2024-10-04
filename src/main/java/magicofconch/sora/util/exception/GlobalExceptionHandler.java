@@ -30,6 +30,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity handleRedirectException(RedirectException e){
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(URI.create(e.getRedirectURI()));
-        return new ResponseEntity(httpHeaders, HttpStatus.FOUND);
+        return new ResponseEntity(httpHeaders, HttpStatus.TEMPORARY_REDIRECT);
     }
 }
