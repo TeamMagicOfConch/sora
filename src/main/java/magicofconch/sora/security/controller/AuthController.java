@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import magicofconch.sora.security.dto.req.LoginReq;
 import magicofconch.sora.security.dto.res.TokenDto;
@@ -34,7 +33,6 @@ public class AuthController {
 	@PostMapping("/user/login")
 	public Response<TokenDto>  login(@RequestBody LoginReq req){
 		TokenDto tokenDto = authService.login(req);
-
 		return Response.ok(tokenDto);
 	}
 
