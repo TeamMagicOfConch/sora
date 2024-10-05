@@ -1,31 +1,28 @@
 package magicofconch.sora.review.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import magicofconch.sora.review.dto.req.SoraReviewReq;
+import magicofconch.sora.review.entity.Review;
 import magicofconch.sora.review.enums.FeedbackType;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import magicofconch.sora.review.repository.ReviewRepository;
+import magicofconch.sora.util.SecurityUtil;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
 	private final OpenAiChatModel openAiChatModel;
+	private final ReviewRepository reviewRepository;
+	private final SecurityUtil securityUtil;
 
 	@Value("${prompt.sora-type.T}")
 	private String promptAsT;
@@ -38,7 +35,7 @@ public class ReviewService {
 	 * @param req : 소라 회고 리뷰 요청
 	 * @return : 소라 응답
 	 */
-	public Flux<String> requestSora(SoraReviewReq req){
+	public String requestSora(SoraReviewReq req){
 		Message userMessage = new UserMessage(req.getBody());
 		SystemPromptTemplate systemPromptTemplate;
 		FeedbackType requestType = req.getType();
@@ -55,22 +52,40 @@ public class ReviewService {
 
 		Message systemMessage = systemPromptTemplate.createMessage();
 
-		AtomicReference<StringBuilder> fullResponse = new AtomicReference<>(new StringBuilder());
+		String feedback = openAiChatModel.call(userMessage, systemMessage);
 
-		return openAiChatModel.stream(userMessage, systemMessage)
-			.doOnNext(response -> {
-				fullResponse.get().append(response); // 전체 응답 누적
-			})
-			.doOnComplete(() -> {
-				// 스트림 완료 시 누적된 응답을 데이터베이스에 저장
-				saveToDatabase(fullResponse.get().toString()).subscribe();
-			});
-
+		return feedback;
 	}
 
-	private Mono<Void> saveToDatabase(String fullResponse) {
-		// DB 저장 로직
-		log.info("ReviewService savetoDatabse = {}", fullResponse);
-		return Mono.empty();
+	public String requestSoraTest(SoraReviewReq req){
+		Message userMessage = new UserMessage(req.getBody());
+		SystemPromptTemplate systemPromptTemplate;
+		FeedbackType requestType = req.getType();
+
+		if(requestType.equals(FeedbackType.FEELING)){
+			systemPromptTemplate = new SystemPromptTemplate(promptAsF);
+		}
+		else{
+			systemPromptTemplate = new SystemPromptTemplate(promptAsT);
+		}
+
+		Message systemMessage = systemPromptTemplate.createMessage();
+
+		String feedback = openAiChatModel.call(userMessage, systemMessage);
+
+		Review review = Review.builder()
+			.userInfo(securityUtil.getCurrentUsersEntity())
+			.body(req.getBody())
+			.feedbackType(req.getType())
+			.feedback(feedback)
+			.build();
+
+		saveToDatabase(review);
+		return feedback;
+	}
+
+	@Transactional
+	public void saveToDatabase(Review review) {
+		reviewRepository.save(review);
 	}
 }

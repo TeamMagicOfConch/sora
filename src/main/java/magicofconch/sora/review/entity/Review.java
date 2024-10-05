@@ -10,11 +10,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import magicofconch.sora.review.enums.FeedbackType;
 import magicofconch.sora.user.entity.UserInfo;
 import magicofconch.sora.util.BaseEntity;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends BaseEntity {
 	@Id
 	@Column(name = "review_id")
@@ -33,4 +39,12 @@ public class Review extends BaseEntity {
 
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String feedback;
+
+	@Builder
+	public Review(UserInfo userInfo, FeedbackType feedbackType, String body, String feedback){
+		this.userInfo = userInfo;
+		this.feedbackType = feedbackType;
+		this.body = body;
+		this.feedback = feedback;
+	}
 }
