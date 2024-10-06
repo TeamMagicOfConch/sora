@@ -35,7 +35,7 @@ public class ReviewService {
 	 * @param req : 소라 회고 리뷰 요청
 	 * @return : 소라 응답
 	 */
-	public String requestSora(SoraReviewReq req){
+	public String requestSoraTest(SoraReviewReq req){
 		Message userMessage = new UserMessage(req.getBody());
 		SystemPromptTemplate systemPromptTemplate;
 		FeedbackType requestType = req.getType();
@@ -57,7 +57,7 @@ public class ReviewService {
 		return feedback;
 	}
 
-	public String requestSoraTest(SoraReviewReq req){
+	public String requestSora(SoraReviewReq req){
 		Message userMessage = new UserMessage(req.getBody());
 		SystemPromptTemplate systemPromptTemplate;
 		FeedbackType requestType = req.getType();
