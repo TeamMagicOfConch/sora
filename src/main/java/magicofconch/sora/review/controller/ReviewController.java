@@ -4,8 +4,11 @@
 	import java.util.concurrent.Executors;
 
 	import org.springframework.http.MediaType;
+	import org.springframework.web.bind.annotation.GetMapping;
 	import org.springframework.web.bind.annotation.PostMapping;
 	import org.springframework.web.bind.annotation.RequestBody;
+	import org.springframework.web.bind.annotation.RequestHeader;
+	import org.springframework.web.bind.annotation.RequestParam;
 	import org.springframework.web.bind.annotation.RestController;
 	import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -15,6 +18,7 @@
 	import magicofconch.sora.review.dto.req.SoraReviewReq;
 	import magicofconch.sora.review.dto.res.ReviewRes;
 	import magicofconch.sora.review.service.ReviewService;
+	import magicofconch.sora.util.Response;
 	import reactor.core.publisher.Flux;
 
 	@Slf4j
@@ -24,7 +28,13 @@
 
 		private final ReviewService reviewService;
 
-		@PostMapping(value = "/auth/user/api/review/today", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+		@GetMapping("/auth/user/api/review/inquiry/month")
+		public Response inquiryReview(@RequestParam int year, int month){
+			log.info("year = {} , month = {}", year, month);
+			return Response.ok(reviewService.inquiryMonthly(year, month));
+		}
+
+		@PostMapping(value = "/auth/user/api/review/submit", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 		public SseEmitter requestSora(@RequestBody SoraReviewReq req, HttpServletResponse response) {
 
 			response.setHeader("X-Accel-Buffering", "no");
@@ -34,16 +44,22 @@
 
 			Executors.newSingleThreadExecutor().submit(() -> {
 				try {
-					log.info("[request sora] feedback: {}", feedback);
-					for (String part : feedback.split("\\s+")) {
-						log.info("[request each part] part: {}", part);
-						emitter.send(part);
+					int seq = 0;
+					for (char part : feedback.toCharArray()) {
+						log.info("[request each char] part: {}", part);
+						ReviewRes res = ReviewRes.builder()
+							.value(String.valueOf(part))
+							.seq(seq)
+							.build();
+
+						emitter.send(res);
+						seq++;
 					}
 
 					emitter.complete();
 				} catch (Exception e) {
-					log.error("SSE 스트리밍 중 오류 발생: {}", e.getMessage());
-					emitter.completeWithError(e); // 오류가 발생한 경우 오류로 완료
+					log.warn("emitter error");
+					emitter.completeWithError(e);
 				}
 			});
 

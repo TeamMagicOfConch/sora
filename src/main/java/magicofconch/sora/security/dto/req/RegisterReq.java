@@ -9,4 +9,6 @@ import magicofconch.sora.user.enums.OsType;
 public class RegisterReq {
 	private String osId;
 	private String osType;
+	private String username;
+	private int initialReviewCount;
 }
