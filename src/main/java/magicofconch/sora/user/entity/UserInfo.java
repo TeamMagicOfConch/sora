@@ -38,17 +38,21 @@ public class UserInfo extends BaseEntity {
     @JoinColumn(name = "user_info_id")
     private List<OsAuthInfo> osAuthInfo = new ArrayList<OsAuthInfo>();
 
-    private Integer initialReviewCount;
+    private int initialReviewCount;
+
+    private String username;
 
     private String role;
 
 
     @Builder
-    public UserInfo(String uuid, String socialId, OsAuthInfo osAuthInfo, String role){
+    public UserInfo(String uuid, String socialId, OsAuthInfo osAuthInfo, String role, String username, int initialReviewCount){
         this.uuid = uuid;
         this.socialId = socialId;
         this.osAuthInfo.add(osAuthInfo);
         this.role = role;
+        this.username = username;
+        this.initialReviewCount = initialReviewCount;
     }
 
 

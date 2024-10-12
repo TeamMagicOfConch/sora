@@ -5,7 +5,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class RegisterRes {
+public class AuthRes {
 	private String accessToken;
 	private String refreshToken;
+	private String username;
 }
