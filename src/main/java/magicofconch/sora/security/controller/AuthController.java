@@ -13,7 +13,7 @@ import magicofconch.sora.security.dto.res.TokenDto;
 import magicofconch.sora.security.jwt.RefreshTokenService;
 import magicofconch.sora.security.service.AuthService;
 import magicofconch.sora.security.dto.req.RegisterReq;
-import magicofconch.sora.security.dto.res.RegisterRes;
+import magicofconch.sora.security.dto.res.AuthRes;
 import magicofconch.sora.util.Response;
 
 @RestController
@@ -24,16 +24,15 @@ public class AuthController {
 	private final RefreshTokenService refreshTokenService;
 
 	@PostMapping("/user/register")
-	public Response<RegisterRes> registerUser(@RequestBody RegisterReq registerReq){
-		RegisterRes res = authService.registerUser(registerReq);
-
+	public Response<AuthRes> registerUser(@RequestBody RegisterReq registerReq){
+		AuthRes res = authService.registerUser(registerReq);
 		return Response.ok(res);
 	}
 
 	@PostMapping("/user/login")
-	public Response<TokenDto>  login(@RequestBody LoginReq req){
-		TokenDto tokenDto = authService.login(req);
-		return Response.ok(tokenDto);
+	public Response<AuthRes>  login(@RequestBody LoginReq req){
+		AuthRes auth = authService.login(req);
+		return Response.ok(auth);
 	}
 
 	@GetMapping("/user/reissue")
@@ -49,7 +48,7 @@ public class AuthController {
 		return Response.ok();
 	}
 
-	@GetMapping("/isthiswork")
+	@GetMapping("/auth/user/isthiswork")
 	public Response okok (){
 		return Response.ok();
 	}

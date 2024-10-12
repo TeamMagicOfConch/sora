@@ -37,7 +37,7 @@ public class CustomUserDetails implements UserDetails, Serializable {
 
 	@Override
 	public String getUsername() {
-		return userDto.getUuid();
+		return userDto.getUsername();
 	}
 
 	public String getUuid(){

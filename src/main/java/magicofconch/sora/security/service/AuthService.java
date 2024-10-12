@@ -12,7 +12,7 @@ import magicofconch.sora.security.dto.res.TokenDto;
 import magicofconch.sora.security.jwt.JwtUtil;
 import magicofconch.sora.security.os_id.OsIdAuthenticationToken;
 import magicofconch.sora.security.dto.req.RegisterReq;
-import magicofconch.sora.security.dto.res.RegisterRes;
+import magicofconch.sora.security.dto.res.AuthRes;
 import magicofconch.sora.user.entity.OsAuthInfo;
 import magicofconch.sora.user.entity.UserInfo;
 import magicofconch.sora.user.enums.UserRole;
@@ -32,7 +32,7 @@ public class AuthService {
 	private final JwtUtil jwtUtil;
 	private final SecurityUtil securityUtil;
 
-	public RegisterRes registerUser(RegisterReq registerReq){
+	public AuthRes registerUser(RegisterReq registerReq){
 
 		if(osAuthInfoRepository.existsByOsId(registerReq.getOsId())){
 			throw new BusinessException(ResponseCode.USER_ALREADY_REGISTERED);
@@ -46,6 +46,8 @@ public class AuthService {
 		UserInfo userInfo = UserInfo.builder()
 			.osAuthInfo(osAuthInfo)
 			.uuid(UUID.randomUUID().toString())
+			.username(registerReq.getUsername())
+			.initialReviewCount(registerReq.getInitialReviewCount())
 			.role(UserRole.ROLE_USER.getRoleName())
 			.build();
 
@@ -55,18 +57,19 @@ public class AuthService {
 		String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), UserRole.ROLE_USER.getRoleName());
 		String refreshToken = jwtUtil.generateRefreshToken(userInfo.getUuid(), UserRole.ROLE_USER.getRoleName());
 
-		RegisterRes res = new RegisterRes(accessToken, refreshToken);
+		AuthRes res = new AuthRes(accessToken, refreshToken, userInfo.getUsername());
 		return res;
 	}
 
 
-	public TokenDto login(LoginReq req){
+	public AuthRes login(LoginReq req){
 
 		OsIdAuthenticationToken authenticationToken = new OsIdAuthenticationToken(req.getOsId());
 
 		OsIdAuthenticationToken osIdAuthenticationToken = (OsIdAuthenticationToken) authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		TokenDto tokenDto =jwtUtil.generateTokenDto(osIdAuthenticationToken);
 
-		return jwtUtil.generateTokenDto(osIdAuthenticationToken);
+		return new AuthRes(tokenDto.getAccessToken(), tokenDto.getRefreshToken(), osIdAuthenticationToken.getUserDetails().getUsername());
 
 	}
 
