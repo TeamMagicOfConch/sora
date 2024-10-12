@@ -31,14 +31,14 @@ public class RefreshTokenService {
 	 */
 	public TokenDto reissue(String refreshToken){
 
-		if(refreshToken == null){ new BusinessException(ResponseCode.NO_REFRESH_TOKEN); }
-
-		try{
-			jwtUtil.isExpired(refreshToken);
-		} catch(JwtException e){
+		if(refreshToken == null){
 			new BusinessException(ResponseCode.NO_REFRESH_TOKEN);
 		}
 
+
+		if(jwtUtil.isExpired(refreshToken)){
+			new BusinessException(ResponseCode.REFRESH_TOKEN_EXPIRED);
+		}
 
 		UserInfo userInfo = userInfoRepository.findUserInfoByUuid(jwtUtil.getUUID(refreshToken))
 			.orElseThrow(() -> new BusinessException(ResponseCode.USER_NOT_FOUND));

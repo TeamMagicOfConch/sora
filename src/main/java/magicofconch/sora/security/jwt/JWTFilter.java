@@ -43,6 +43,7 @@ public class JWTFilter extends OncePerRequestFilter {
 		FilterChain filterChain) throws ServletException, IOException {
 
 		String requestURI = request.getRequestURI();
+		log.info("[JWTFilter] - access URI ={}", requestURI);
 		if (WHITE_LIST.stream().anyMatch(requestURI::startsWith)) {
 			filterChain.doFilter(request, response);
 			return;
@@ -57,7 +58,7 @@ public class JWTFilter extends OncePerRequestFilter {
 		catch(JwtException e){
 			//response body
 			PrintWriter writer = response.getWriter();
-			writer.print("access token expired");
+			writer.print("UnAuthorized");
 
 			//response status code
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
