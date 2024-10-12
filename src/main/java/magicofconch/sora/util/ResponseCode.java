@@ -11,7 +11,7 @@ public enum ResponseCode {
 
     //Authentication
     NO_REFRESH_TOKEN(400, "SEC-001", HttpStatus.BAD_REQUEST, "Refresh token is blank"),
-    REFRESH_TOKEN_EXPIRED(400, "SEC-001", HttpStatus.BAD_REQUEST, "Refresh token is blank"),
+    REFRESH_TOKEN_EXPIRED(401, "SEC-001", HttpStatus.UNAUTHORIZED, "Refresh token is expired"),
 
 
     //User
@@ -19,6 +19,9 @@ public enum ResponseCode {
     USER_ALREADY_REGISTERED(400, "USR-001", HttpStatus.BAD_REQUEST, "This User is already registered please login"),
     USER_NOT_FOUND(400, "USR-002", HttpStatus.BAD_REQUEST, "Can't find user"),
     LOGIN_FAIL(400, "USR-003", HttpStatus.BAD_REQUEST, "Login failed"),
+
+    //Review
+    REVIEW_ALREADY_EXIT(400, "RVW-001", HttpStatus.BAD_REQUEST, "Review is already exist"),
 
     //Validation
     ARGUMENT_NOT_VALID(400, "VAL-001", HttpStatus.BAD_REQUEST, "Argument not valid");
