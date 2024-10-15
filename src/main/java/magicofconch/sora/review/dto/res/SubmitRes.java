@@ -5,6 +5,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class SoraReviewRes {
+public class SubmitRes {
 	private String feedback;
 }

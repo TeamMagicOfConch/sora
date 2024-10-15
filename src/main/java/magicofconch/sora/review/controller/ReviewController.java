@@ -7,7 +7,6 @@
 	import org.springframework.web.bind.annotation.GetMapping;
 	import org.springframework.web.bind.annotation.PostMapping;
 	import org.springframework.web.bind.annotation.RequestBody;
-	import org.springframework.web.bind.annotation.RequestHeader;
 	import org.springframework.web.bind.annotation.RequestParam;
 	import org.springframework.web.bind.annotation.RestController;
 	import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -15,7 +14,7 @@
 	import jakarta.servlet.http.HttpServletResponse;
 	import lombok.RequiredArgsConstructor;
 	import lombok.extern.slf4j.Slf4j;
-	import magicofconch.sora.review.dto.req.SoraReviewReq;
+	import magicofconch.sora.review.dto.req.SubmitReq;
 	import magicofconch.sora.review.dto.res.ReviewRes;
 	import magicofconch.sora.review.service.ReviewService;
 	import magicofconch.sora.util.Response;
@@ -35,7 +34,7 @@
 		}
 
 		@PostMapping(value = "/auth/user/api/review/submit", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-		public SseEmitter requestSora(@RequestBody SoraReviewReq req, HttpServletResponse response) {
+		public SseEmitter submitReview(@RequestBody SubmitReq req, HttpServletResponse response) {
 
 			response.setHeader("X-Accel-Buffering", "no");
 			response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
@@ -67,7 +66,7 @@
 		}
 
 		@PostMapping(value = "/test/api/request/review", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-		public SseEmitter requestSoraTest(@RequestBody SoraReviewReq req, HttpServletResponse response) {
+		public SseEmitter requestSoraTest(@RequestBody SubmitReq req, HttpServletResponse response) {
 			response.setHeader("X-Accel-Buffering", "no");
 			response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
 			SseEmitter emitter = new SseEmitter();
@@ -104,7 +103,7 @@
 
 
 		@PostMapping(value = "/test/api/request/review/flux", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-		public Flux<String> requestSoraTest2(@RequestBody SoraReviewReq req, HttpServletResponse response) {
+		public Flux<String> requestSoraTest2(@RequestBody SubmitReq req, HttpServletResponse response) {
 			// Nginx에서 SSE 응답에 대해 버퍼링을 비활성화하기 위한 헤더 추가
 			response.setHeader("X-Accel-Buffering", "no");
 			response.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);

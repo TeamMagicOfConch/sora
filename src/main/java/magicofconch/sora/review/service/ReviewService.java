@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import magicofconch.sora.review.dto.req.SoraReviewReq;
-import magicofconch.sora.review.dto.res.InquiryReviewRes;
+import magicofconch.sora.review.dto.req.SubmitReq;
+import magicofconch.sora.review.dto.res.InquiryMonthRes;
 import magicofconch.sora.review.entity.Review;
 import magicofconch.sora.review.enums.FeedbackType;
 import magicofconch.sora.review.repository.ReviewRepository;
@@ -44,26 +44,31 @@ public class ReviewService {
 	 * @param month
 	 * @return
 	 */
-	public List<InquiryReviewRes> inquiryMonthly(int year, int month){
-		List<InquiryReviewRes> inquiryReviewResList = new ArrayList<>();
+	public List<InquiryMonthRes> inquiryMonthly(int year, int month){
+		List<InquiryMonthRes> inquiryReviewResList = new ArrayList<>();
 		UserInfo userInfo = securityUtil.getCurrentUsersEntity();
 		List<Review> reviews = reviewRepository.findByUserInfoIdAndUpdatedAtBetween(userInfo.getId(), month, year);
 
 		for(Review review : reviews){
-			InquiryReviewRes  res = new InquiryReviewRes(review);
+			InquiryMonthRes res = new InquiryMonthRes(review);
 			inquiryReviewResList.add(res);
 		}
 
 		return inquiryReviewResList;
 	}
 
-	public String requestSora(SoraReviewReq req){
+	/**
+	 * review 작성 메서드
+	 * @param req
+	 * @return
+	 */
+	public String requestSora(SubmitReq req){
 		Message userMessage = new UserMessage(req.getBody());
 		SystemPromptTemplate systemPromptTemplate;
 		FeedbackType requestType = req.getType();
 		UserInfo userInfo = securityUtil.getCurrentUsersEntity();
 
-		if(reviewRepository.existsByReviewDate(req.getReviewDate())){
+		if(reviewRepository.existsByReviewDateAndUserInfo(req.getReviewDate(), userInfo)){
 			throw new BusinessException(ResponseCode.REVIEW_ALREADY_EXIT);
 		}
 
@@ -90,12 +95,15 @@ public class ReviewService {
 		return feedback;
 	}
 
+
+
+
 	/**
 	 * todo : Review Entity 생성 후 저장
 	 * @param req : 소라 회고 리뷰 요청
 	 * @return : 소라 응답
 	 */
-	public String requestSoraTest(SoraReviewReq req){
+	public String requestSoraTest(SubmitReq req){
 		Message userMessage = new UserMessage(req.getBody());
 		SystemPromptTemplate systemPromptTemplate;
 		FeedbackType requestType = req.getType();

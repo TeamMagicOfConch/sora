@@ -28,9 +28,9 @@ public class UserInfo extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "review_id")
+    @OneToMany(mappedBy ="user_info", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<Review>();
+
     private String uuid;
     private String socialId;
 

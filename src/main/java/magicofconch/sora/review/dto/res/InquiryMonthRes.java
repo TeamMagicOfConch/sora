@@ -5,13 +5,13 @@ import magicofconch.sora.review.entity.Review;
 import magicofconch.sora.review.enums.FeedbackType;
 
 @Getter
-public class InquiryReviewRes {
+public class InquiryMonthRes {
 
 	private int day;
 	private FeedbackType feedbackType;
 
 
-	public InquiryReviewRes(Review review){
+	public InquiryMonthRes(Review review){
 		this.day = review.getUpdatedAt().getDayOfMonth();
 		this.feedbackType = review.getFeedbackType();
 	}
