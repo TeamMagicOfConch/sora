@@ -12,7 +12,7 @@ public class InquiryMonthRes {
 
 
 	public InquiryMonthRes(Review review){
-		this.day = review.getUpdatedAt().getDayOfMonth();
+		this.day = review.getReviewDate().getDayOfMonth();
 		this.feedbackType = review.getFeedbackType();
 	}
 }
