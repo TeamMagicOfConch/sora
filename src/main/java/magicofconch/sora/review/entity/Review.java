@@ -12,6 +12,7 @@
 	import jakarta.persistence.Id;
 	import jakarta.persistence.JoinColumn;
 	import jakarta.persistence.ManyToOne;
+	import jakarta.persistence.Table;
 	import lombok.AccessLevel;
 	import lombok.Builder;
 	import lombok.Getter;
@@ -22,6 +23,7 @@
 
 	@Entity
 	@Getter
+	@Table(name = "review")
 	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	public class Review extends BaseEntity {
 		@Id
@@ -30,7 +32,7 @@
 		private Long id;
 
 		@ManyToOne(fetch = FetchType.LAZY)
-		@JoinColumn(name = "review_id", insertable = false, updatable = false)
+		@JoinColumn(name = "user_info_id")
 		private UserInfo userInfo;
 
 		@Enumerated(EnumType.STRING)
