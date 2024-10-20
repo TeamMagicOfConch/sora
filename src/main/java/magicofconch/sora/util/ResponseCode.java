@@ -21,7 +21,8 @@ public enum ResponseCode {
     LOGIN_FAIL(400, "USR-003", HttpStatus.BAD_REQUEST, "Login failed"),
 
     //Review
-    REVIEW_ALREADY_EXIT(400, "RVW-001", HttpStatus.BAD_REQUEST, "Review is already exist"),
+    REVIEW_ALREADY_EXIST(400, "RVW-001", HttpStatus.BAD_REQUEST, "Review is already exist"),
+    REVIEW_NOT_EXIST(400, "RVW-002", HttpStatus.BAD_REQUEST, "Review is not exist"),
 
     //Validation
     ARGUMENT_NOT_VALID(400, "VAL-001", HttpStatus.BAD_REQUEST, "Argument not valid");

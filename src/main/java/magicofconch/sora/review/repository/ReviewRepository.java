@@ -2,6 +2,7 @@ package magicofconch.sora.review.repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +18,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 		@Param("month") int month,
 		@Param("year") int year);
 
-	boolean existsByReviewDate(LocalDate reviewDate);
+	boolean existsByReviewDateAndUserInfo(LocalDate reviewDate, UserInfo userInfo);
+
+	Optional<Review> findReviewByReviewDateAndUserInfo(LocalDate reviewDate, UserInfo userInfo);
 
 	List<Review> findByUserInfo(UserInfo userInfo);
 }

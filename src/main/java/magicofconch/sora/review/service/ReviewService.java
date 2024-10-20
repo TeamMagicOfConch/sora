@@ -1,5 +1,6 @@
 package magicofconch.sora.review.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import magicofconch.sora.review.dto.req.SubmitReq;
+import magicofconch.sora.review.dto.res.InquiryDayRes;
 import magicofconch.sora.review.dto.res.InquiryMonthRes;
 import magicofconch.sora.review.entity.Review;
 import magicofconch.sora.review.enums.FeedbackType;
@@ -69,7 +71,7 @@ public class ReviewService {
 		UserInfo userInfo = securityUtil.getCurrentUsersEntity();
 
 		if(reviewRepository.existsByReviewDateAndUserInfo(req.getReviewDate(), userInfo)){
-			throw new BusinessException(ResponseCode.REVIEW_ALREADY_EXIT);
+			throw new BusinessException(ResponseCode.REVIEW_ALREADY_EXIST);
 		}
 
 		if(requestType.equals(FeedbackType.FEELING)){
@@ -95,8 +97,18 @@ public class ReviewService {
 		return feedback;
 	}
 
+	public InquiryDayRes inquiryDay(LocalDate date){
+		UserInfo user = securityUtil.getCurrentUsersEntity();
 
+		Review review = reviewRepository.findReviewByReviewDateAndUserInfo(date, user)
+			.orElseThrow(() -> new BusinessException(ResponseCode.REVIEW_NOT_EXIST));
 
+		return InquiryDayRes.builder()
+			.feedback(review.getFeedback())
+			.body(review.getBody())
+			.date(review.getReviewDate())
+			.build();
+	}
 
 	/**
 	 * todo : Review Entity 생성 후 저장

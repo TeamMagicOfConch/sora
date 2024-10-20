@@ -1,6 +1,8 @@
 	package magicofconch.sora.review.controller;
 
 	import java.time.Duration;
+	import java.time.LocalDate;
+	import java.util.List;
 	import java.util.concurrent.Executors;
 
 	import org.springframework.http.MediaType;
@@ -15,6 +17,8 @@
 	import lombok.RequiredArgsConstructor;
 	import lombok.extern.slf4j.Slf4j;
 	import magicofconch.sora.review.dto.req.SubmitReq;
+	import magicofconch.sora.review.dto.res.InquiryDayRes;
+	import magicofconch.sora.review.dto.res.InquiryMonthRes;
 	import magicofconch.sora.review.dto.res.ReviewRes;
 	import magicofconch.sora.review.service.ReviewService;
 	import magicofconch.sora.util.Response;
@@ -27,8 +31,15 @@
 
 		private final ReviewService reviewService;
 
+		@GetMapping("/auth/user/api/review/inquiry/day")
+		public Response<InquiryDayRes> inquiryDate(@RequestParam int year, int month, int day){
+			LocalDate date = LocalDate.of(year, month, day);
+
+			return Response.ok(reviewService.inquiryDay(date));
+		}
+
 		@GetMapping("/auth/user/api/review/inquiry/month")
-		public Response inquiryReview(@RequestParam int year, int month){
+		public Response<List<InquiryMonthRes>> inquiryMonth(@RequestParam int year, int month){
 			log.info("year = {} , month = {}", year, month);
 			return Response.ok(reviewService.inquiryMonthly(year, month));
 		}
