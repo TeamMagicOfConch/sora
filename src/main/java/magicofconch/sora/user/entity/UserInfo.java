@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +22,7 @@ import magicofconch.sora.util.BaseEntity;
 
 @Getter
 @Entity
+@Table(name = "user_info")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserInfo extends BaseEntity {
     @Id
@@ -28,7 +30,7 @@ public class UserInfo extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy ="user_info", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy ="userInfo", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<Review>();
 
     private String uuid;
