@@ -1,6 +1,7 @@
 package magicofconch.sora.util;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,22 @@ public class SecurityUtil {
 			return userInfoRepository.findUserInfoByUuid(uuid)
 				.orElseThrow(() -> new BusinessException(ResponseCode.USER_NOT_FOUND));
 		}
+		throw new BusinessException(ResponseCode.USER_NOT_FOUND);
+	}
+
+	public String getUserRole(){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails userDetails) {
+
+			String role = userDetails.getAuthorities().stream()
+				.findFirst()
+				.map(GrantedAuthority::getAuthority)
+				.orElse("NONE");
+
+			return role;
+		}
+
 		throw new BusinessException(ResponseCode.USER_NOT_FOUND);
 	}
 

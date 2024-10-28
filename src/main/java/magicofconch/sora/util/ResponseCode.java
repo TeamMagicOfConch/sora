@@ -12,6 +12,7 @@ public enum ResponseCode {
     //Authentication
     NO_REFRESH_TOKEN(400, "SEC-001", HttpStatus.BAD_REQUEST, "Refresh token is blank"),
     REFRESH_TOKEN_EXPIRED(401, "SEC-001", HttpStatus.UNAUTHORIZED, "Refresh token is expired"),
+    REFRESH_TOKEN_NOT_MATCH(401, "SEC-003", HttpStatus.UNAUTHORIZED, "Refresh token is expired"),
 
 
     //User
