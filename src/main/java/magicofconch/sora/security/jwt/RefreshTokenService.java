@@ -43,6 +43,10 @@ public class RefreshTokenService {
 		UserInfo userInfo = userInfoRepository.findUserInfoByUuid(jwtUtil.getUUID(refreshToken))
 			.orElseThrow(() -> new BusinessException(ResponseCode.USER_NOT_FOUND));
 
+		if(!userInfo.getRefreshToken().equals(refreshToken)){
+			new BusinessException(ResponseCode.REFRESH_TOKEN_EXPIRED);
+		}
+
 		String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), userInfo.getRole());
 
 		return new TokenDto(accessToken, refreshToken);

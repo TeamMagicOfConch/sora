@@ -49,13 +49,12 @@ public class JWTFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		String accessToken = resolveAccessToken(request);
+		String accessToken;
 
 		try{
+			accessToken = resolveAccessToken(request);
 			jwtUtil.isExpired(accessToken);
-
-		}
-		catch(JwtException e){
+		} catch(JwtException e){
 			//response body
 			PrintWriter writer = response.getWriter();
 			writer.print("UnAuthorized");
@@ -84,6 +83,10 @@ public class JWTFilter extends OncePerRequestFilter {
 
 	private String resolveAccessToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+		if(bearerToken == null){
+			throw new JwtException("no token");
+		}
+
 		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
 			return bearerToken.split(" ")[1].trim();
 		}

@@ -26,14 +26,12 @@ public class OsIdAuthenticationToken extends AbstractAuthenticationToken {
 		super.setAuthenticated(true);
 	}
 
-	// 자격 증명 없음
 	@Override
 	public Object getCredentials() {
 
 		return null;
 	}
 
-	// 인증 후 사용자 정보 반환
 	@Override
 	public Object getPrincipal() {
 

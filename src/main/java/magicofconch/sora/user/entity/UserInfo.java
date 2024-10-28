@@ -46,15 +46,22 @@ public class UserInfo extends BaseEntity {
 
     private String role;
 
+    private String refreshToken;
+
+    public void updateRefreshToken(String refreshToken){
+        this.refreshToken = refreshToken;
+    }
+
 
     @Builder
-    public UserInfo(String uuid, String socialId, OsAuthInfo osAuthInfo, String role, String username, int initialReviewCount){
+    public UserInfo(String uuid, String socialId, OsAuthInfo osAuthInfo, String role, String username, int initialReviewCount, String refreshToken){
         this.uuid = uuid;
         this.socialId = socialId;
         this.osAuthInfo.add(osAuthInfo);
         this.role = role;
         this.username = username;
         this.initialReviewCount = initialReviewCount;
+        this.refreshToken = refreshToken;
     }
 
 

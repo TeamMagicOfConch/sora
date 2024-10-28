@@ -51,23 +51,33 @@ public class AuthService {
 			.role(UserRole.ROLE_USER.getRoleName())
 			.build();
 
-		osAuthInfoRepository.save(osAuthInfo);
-		userInfoRepository.save(userInfo);
-
 		String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), UserRole.ROLE_USER.getRoleName());
 		String refreshToken = jwtUtil.generateRefreshToken(userInfo.getUuid(), UserRole.ROLE_USER.getRoleName());
+
+		userInfo.updateRefreshToken(refreshToken);
+
+		osAuthInfoRepository.save(osAuthInfo);
+		userInfoRepository.save(userInfo);
 
 		AuthRes res = new AuthRes(accessToken, refreshToken, userInfo.getUsername());
 		return res;
 	}
 
 
+	@Transactional
 	public AuthRes login(LoginReq req){
 
 		OsIdAuthenticationToken authenticationToken = new OsIdAuthenticationToken(req.getOsId());
 
 		OsIdAuthenticationToken osIdAuthenticationToken = (OsIdAuthenticationToken) authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 		TokenDto tokenDto =jwtUtil.generateTokenDto(osIdAuthenticationToken);
+
+		String uuid = osIdAuthenticationToken.getUserDetails().getUuid();
+
+		UserInfo user = userInfoRepository.findUserInfoByUuid(uuid)
+				.orElseThrow(() -> new BusinessException(ResponseCode.USER_NOT_FOUND));
+
+		user.updateRefreshToken(tokenDto.getRefreshToken());
 
 		return new AuthRes(tokenDto.getAccessToken(), tokenDto.getRefreshToken(), osIdAuthenticationToken.getUserDetails().getUsername());
 
