@@ -22,6 +22,7 @@ public enum ResponseCode {
     LOGIN_FAIL(400, "USR-003", HttpStatus.BAD_REQUEST, "Login failed"),
 
     //Review
+    REVIEW_GENERAL_FAIL(400, "RVW-000", HttpStatus.BAD_REQUEST, "Review fail for system problem"),
     REVIEW_ALREADY_EXIST(400, "RVW-001", HttpStatus.BAD_REQUEST, "Review is already exist"),
     REVIEW_NOT_EXIST(400, "RVW-002", HttpStatus.BAD_REQUEST, "Review is not exist"),
 
