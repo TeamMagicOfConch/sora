@@ -12,6 +12,9 @@ build/
 /my.cnf
 /.env
 
+### build ###
+/build_and_push.ps1
+
 ### STS ###
 .apt_generated
 .classpath
