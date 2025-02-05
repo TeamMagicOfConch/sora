@@ -4,6 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import jakarta.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -26,15 +27,21 @@ public class JwtUtil {
 
 
     @Value("${jwt.expiration.access}")
-    private static String accessTokenExpirationTime;
+    private String accessTokenExpirationTime;
 
     @Value("${jwt.expiration.refresh}")
-    private static String refreshTokenExpirationTime;
+    private String refreshTokenExpirationTime;
 
-    public static final long REFRESH_TOKEN_EXPIRATION = TimeUnit.MINUTES.toMillis(
-            Integer.parseInt(accessTokenExpirationTime));
-    public static final long ACCESS_TOKEN_EXPIRATION = TimeUnit.MINUTES.toMillis(
-            Integer.parseInt(refreshTokenExpirationTime));
+    public long REFRESH_TOKEN_EXPIRATION;
+    public long ACCESS_TOKEN_EXPIRATION;
+
+    @PostConstruct
+    public void init() {
+        REFRESH_TOKEN_EXPIRATION = TimeUnit.MINUTES.toMillis(
+                Integer.parseInt(refreshTokenExpirationTime));
+        ACCESS_TOKEN_EXPIRATION = TimeUnit.MINUTES.toMillis(
+                Integer.parseInt(accessTokenExpirationTime));
+    }
 
 
     public JwtUtil(@Value("${jwt.secret}") String secret) {
