@@ -1,5 +1,7 @@
 package magicofconch.sora.review.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -14,7 +16,9 @@ import magicofconch.sora.review.dto.res.InquiryMonthRes;
 import magicofconch.sora.review.dto.res.ReviewRes;
 import magicofconch.sora.review.service.ReviewService;
 import magicofconch.sora.util.Response;
+import magicofconch.sora.util.ResponseCode;
 import magicofconch.sora.util.SecurityUtil;
+import magicofconch.sora.util.exception.BusinessException;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.concurrent.DelegatingSecurityContextExecutorService;
@@ -48,7 +52,17 @@ public class ReviewController {
     }
 
     @PostMapping(value = "/auth/user/api/review/submit", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter submitReview(@RequestBody SubmitReq req, HttpServletResponse response) {
+    public SseEmitter submitReview(@RequestBody String requestBody, HttpServletResponse response) {
+        SubmitReq req;
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            req = objectMapper.readValue(requestBody, SubmitReq.class);
+
+        } catch (Exception e) {
+            throw new BusinessException(ResponseCode.REVIEW_JSON_ERROR);
+        }
 
         SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
 
