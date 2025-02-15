@@ -14,6 +14,7 @@ build/
 
 ### build ###
 /build_and_push.ps1
+/build_and_push_test.ps1
 
 ### STS ###
 .apt_generated
