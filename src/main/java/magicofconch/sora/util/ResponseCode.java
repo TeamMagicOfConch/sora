@@ -25,6 +25,7 @@ public enum ResponseCode {
     REVIEW_GENERAL_FAIL(400, "RVW-000", HttpStatus.BAD_REQUEST, "Review fail for system problem"),
     REVIEW_ALREADY_EXIST(400, "RVW-001", HttpStatus.BAD_REQUEST, "Review is already exist"),
     REVIEW_NOT_EXIST(400, "RVW-002", HttpStatus.BAD_REQUEST, "Review is not exist"),
+    REVIEW_JSON_ERROR(400, "RVW-003", HttpStatus.BAD_REQUEST, "Can't resolve request body"),
 
     //Validation
     ARGUMENT_NOT_VALID(400, "VAL-001", HttpStatus.BAD_REQUEST, "Argument not valid");
