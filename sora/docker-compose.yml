@@ -1,0 +1,48 @@
+services:
+  app:
+    image: smdmim/sora_be-app:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - redis
+    env_file:
+      - .env
+    networks:
+      - backend
+    environment:
+      TZ: Asia/Seoul  # 한국 시간대 설정
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      MYSQL_DATABASE: ${SPRING_DATASOURCE_DATABASE}
+      TZ: Asia/Seoul  # 한국 시간대 설정
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/my.cnf
+    networks:
+      - backend
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass ${SPRING_REDIS_PASSWORD} --port 6379
+    volumes:
+      - redis-data:/data  # Redis 볼륨 추가
+    networks:
+      - backend
+    environment:
+      TZ: Asia/Seoul  # 한국 시간대 설정
+
+networks:
+  backend:
+
+volumes:
+  mysql-data:  # MySQL 볼륨
+  redis-data:  # Redis 볼륨
