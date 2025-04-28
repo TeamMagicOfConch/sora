@@ -1,3 +1,10 @@
+
+buildscript {
+    ext {
+        springBootVersion = '3.4.1'
+        dependencyManagementVersion = '1.1.7'
+    }
+}
 plugins {
     id 'java'
 }
