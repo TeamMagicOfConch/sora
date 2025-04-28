@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
-@EntityScan(basePackages = "magicofconch")
+@EntityScan(basePackages = {"magicofconch", "magicOfConch"})
 public class SoraAdminApplication {
 
     public static void main(String[] args) {
