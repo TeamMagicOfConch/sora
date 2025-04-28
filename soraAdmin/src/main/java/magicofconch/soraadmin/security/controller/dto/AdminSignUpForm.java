@@ -1,4 +1,4 @@
-package magicofconch.soraadmin.admin.controller.dto;
+package magicofconch.soraadmin.security.controller.dto;
 
 import lombok.Getter;
 import lombok.Setter;

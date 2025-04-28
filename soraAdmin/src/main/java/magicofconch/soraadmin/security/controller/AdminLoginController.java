@@ -1,4 +1,4 @@
-package magicofconch.soraadmin.admin.controller;
+package magicofconch.soraadmin.security.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

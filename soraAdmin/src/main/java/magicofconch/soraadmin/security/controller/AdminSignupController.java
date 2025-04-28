@@ -1,7 +1,7 @@
-package magicofconch.soraadmin.admin.controller;
+package magicofconch.soraadmin.security.controller;
 
 import magicofconch.soraadmin.admin.service.AdminService;
-import magicofconch.soraadmin.admin.controller.dto.AdminSignUpForm;
+import magicofconch.soraadmin.security.controller.dto.AdminSignUpForm;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

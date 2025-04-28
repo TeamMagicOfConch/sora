@@ -2,7 +2,7 @@ package magicofconch.soraadmin.admin.service;
 
 import magicOfConch.user.Admin;
 import magicofconch.soraadmin.admin.AdminRepository;
-import magicofconch.soraadmin.admin.controller.dto.AdminSignUpForm;
+import magicofconch.soraadmin.security.controller.dto.AdminSignUpForm;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
