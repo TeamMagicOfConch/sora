@@ -1,1 +1,3 @@
-rootProject.name = 'sora'
+rootProject.name = 'magicOfConch'
+include 'sora', 'soraAdmin', 'domain-entity'
+
