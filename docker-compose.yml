@@ -21,7 +21,7 @@ services:
       context: .
       dockerfile: Dockerfile.admin
     ports:
-      - "8081:8080"
+      - "8090:8080"
     depends_on:
       - mysql
     env_file:
