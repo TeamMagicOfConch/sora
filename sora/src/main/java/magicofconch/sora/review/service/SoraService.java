@@ -11,7 +11,7 @@ import magicofconch.sora.util.exception.BusinessException;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
-import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.openai.OpenAiChatClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +21,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SoraService {
 
-    private final OpenAiChatModel openAiChatModel;
+    private final OpenAiChatClient chatClient;  // 변경된 부분
     private final ReviewRepository reviewRepository;
     private final SecurityUtil securityUtil;
     private final ReviewService reviewService;
-
 
     @Value("${prompt.sora-type.T}")
     private String promptAsT;
@@ -40,29 +39,29 @@ public class SoraService {
      * @return
      */
     public String requestSora(SubmitReq req) {
-        Message userMessage = new UserMessage(req.getBody());
-        SystemPromptTemplate systemPromptTemplate;
         FeedbackType requestType = req.getType();
         UserInfo userInfo = securityUtil.getCurrentUsersEntity();
 
+        // 중복 리뷰 검사
         if (reviewRepository.existsByReviewDateAndUserInfo(req.getReviewDate(), userInfo)) {
             throw new BusinessException(ResponseCode.REVIEW_ALREADY_EXIST);
         }
 
-        if (requestType.equals(FeedbackType.FEELING)) {
-            systemPromptTemplate = new SystemPromptTemplate(promptAsF);
-        } else {
-            systemPromptTemplate = new SystemPromptTemplate(promptAsT);
-        }
+        // 프롬프트 선택
+        String promptTemplate = requestType.equals(FeedbackType.FEELING) ? promptAsF : promptAsT;
+        String systemPrompt = promptTemplate.replace("{name}", userInfo.getUsername());
 
-        Message systemMessage = systemPromptTemplate.createMessage(Map.of("name", userInfo.getUsername()));
+        reviewService.printDbConnectionStatus("==== [Inside requestSora] DB Connection Status ====");
 
-        reviewService.printDbConnectionStatus("==== [Inside requestSora] DB Connection Status ===="); // 현재 DB 커넥션 개수 출력
+        // 사용자 메시지와 프롬프트 합치기
+        String fullPrompt = systemPrompt + "\n" + req.getBody();
 
-        String feedback = openAiChatModel.call(userMessage, systemMessage);
+        // ChatClient 호출
+        String feedback = chatClient.call(fullPrompt);
+
         reviewService.saveReview(req, feedback, userInfo);
 
-        reviewService.printDbConnectionStatus("==== [After requestSora] DB Connection Status ===="); // 현재 DB 커넥션 개수 출력
+        reviewService.printDbConnectionStatus("==== [After requestSora] DB Connection Status ====");
 
         return feedback;
     }
