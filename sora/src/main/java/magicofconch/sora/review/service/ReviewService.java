@@ -13,7 +13,6 @@ import magicofconch.sora.util.Encryption.EncryptionUtil;
 import magicofconch.sora.util.ResponseCode;
 import magicofconch.sora.util.SecurityUtil;
 import magicofconch.sora.util.exception.BusinessException;
-import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +26,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
-    private final OpenAiChatModel openAiChatModel;
     private final ReviewRepository reviewRepository;
     private final SecurityUtil securityUtil;
     private final EncryptionUtil encryptionUtil;
