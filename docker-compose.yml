@@ -30,10 +30,11 @@ services:
       - backend
     environment:
       TZ: Asia/Seoul
+
   sora-webflux:
     build:
       context: .
-      dockerfile: Dockerfile.admin
+      dockerfile: Dockerfile.sora-webflux
     ports:
       - "8081:8080"
     depends_on:
