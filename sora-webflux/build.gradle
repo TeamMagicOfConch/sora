@@ -39,8 +39,6 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT")
-    // Replace the following with the starter dependencies of specific modules you wish to use
-    //implementation 'org.springframework.ai:spring-ai-openai'
     implementation 'org.springframework.ai:spring-ai-starter-model-openai'
 
 
