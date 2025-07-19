@@ -45,7 +45,7 @@ public class RefreshTokenService {
             throw new BusinessException(ResponseCode.REFRESH_TOKEN_NOT_MATCH);
         }
 
-        String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), userInfo.getRole());
+        String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), userInfo.getRole(), userInfo.getUsername());
 
         return new TokenDto(accessToken, refreshToken);
     }

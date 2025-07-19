@@ -6,6 +6,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import magicofconch.sora.review.dto.req.SaveReq;
 import magicofconch.sora.review.dto.req.SubmitReq;
 import magicofconch.sora.review.dto.res.InquiryDayRes;
 import magicofconch.sora.review.dto.res.InquiryMonthRes;
@@ -29,6 +30,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -58,6 +60,13 @@ public class ReviewController {
     public ResponseEntity<?> testSecurity() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return ResponseEntity.ok(authentication);
+    }
+
+    @PostMapping("/auth/user/review")
+    public ResponseEntity<?> saveReview(@RequestBody SaveReq saveReq) {
+        reviewService.saveReview(saveReq);
+
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = "/auth/user/api/review/submit", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.TEXT_EVENT_STREAM_VALUE)

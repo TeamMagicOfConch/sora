@@ -1,16 +1,15 @@
 package magicofconch.sora.security.service;
 
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import magicOfConch.enums.UserRole;
+import magicOfConch.user.OsAuthInfo;
+import magicOfConch.user.UserInfo;
 import magicofconch.sora.security.dto.req.LoginReq;
 import magicofconch.sora.security.dto.req.RegisterReq;
 import magicofconch.sora.security.dto.res.AuthRes;
 import magicofconch.sora.security.dto.res.TokenDto;
 import magicofconch.sora.security.jwt.JwtUtil;
 import magicofconch.sora.security.os_id.OsIdAuthenticationToken;
-import magicOfConch.user.OsAuthInfo;
-import magicOfConch.user.UserInfo;
-import magicOfConch.enums.UserRole;
 import magicofconch.sora.user.repository.OsAuthInfoRepository;
 import magicofconch.sora.user.repository.UserInfoRepository;
 import magicofconch.sora.util.ResponseCode;
@@ -19,6 +18,8 @@ import magicofconch.sora.util.exception.BusinessException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -50,8 +51,8 @@ public class AuthService {
                 .role(UserRole.ROLE_USER.getRoleName())
                 .build();
 
-        String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), UserRole.ROLE_USER.getRoleName());
-        String refreshToken = jwtUtil.generateRefreshToken(userInfo.getUuid(), UserRole.ROLE_USER.getRoleName());
+        String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), UserRole.ROLE_USER.getRoleName(), userInfo.getUsername());
+        String refreshToken = jwtUtil.generateRefreshToken(userInfo.getUuid(), UserRole.ROLE_USER.getRoleName(), userInfo.getUsername());
 
         userInfo.updateRefreshToken(refreshToken);
 
