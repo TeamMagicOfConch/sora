@@ -53,6 +53,15 @@ public class JwtUtil {
         }
     }
 
+    public String getUsername(String token) {
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("username", String.class);
+    }
+
     public String getUUID(String token) {
         return Jwts.parser()
                 .verifyWith(secretKey)

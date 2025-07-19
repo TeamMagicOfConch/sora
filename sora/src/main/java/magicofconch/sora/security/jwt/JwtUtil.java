@@ -56,6 +56,15 @@ public class JwtUtil {
         }
     }
 
+    public String getUsername(String token) {
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("username", String.class);
+    }
+
     public String getUUID(String token) {
         return Jwts.parser()
                 .verifyWith(secretKey)
@@ -84,10 +93,11 @@ public class JwtUtil {
                 .before(new Date());
     }
 
-    public String generateAccessToken(String uuid, String role) {
+    public String generateAccessToken(String uuid, String role, String username) {
         return Jwts.builder()
                 .claim("uuid", uuid)
                 .claim("role", role)
+                .claim("username", username)
                 .claim("category", "access")
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
@@ -95,10 +105,11 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String generateRefreshToken(String uuid, String role) {
+    public String generateRefreshToken(String uuid, String role, String username) {
         return Jwts.builder()
                 .claim("uuid", uuid)
                 .claim("role", role)
+                .claim("username", username)
                 .claim("category", "refresh")
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
@@ -109,9 +120,10 @@ public class JwtUtil {
     public TokenDto generateTokenDto(OsIdAuthenticationToken authentication) {
 
         String uuid = authentication.getUserDetails().getUuid();
+        String username = authentication.getUserDetails().getUsername();
 
-        String accessToken = generateAccessToken(uuid, UserRole.ROLE_USER.getRoleName());
-        String refreshToken = generateRefreshToken(uuid, UserRole.ROLE_USER.getRoleName());
+        String accessToken = generateAccessToken(uuid, UserRole.ROLE_USER.getRoleName(), username);
+        String refreshToken = generateRefreshToken(uuid, UserRole.ROLE_USER.getRoleName(), username);
 
         return new TokenDto(accessToken, refreshToken);
 
