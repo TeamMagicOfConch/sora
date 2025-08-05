@@ -1,10 +1,19 @@
 FROM gradle:8.5-jdk17 AS build
 WORKDIR /build
+
+# 전체 프로젝트 복사
 COPY . .
+
+# sora-webflux 모듈만 bootJar 빌드
 RUN gradle :sora-webflux:bootJar
 
+# 실행용 이미지
 FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY --from=build /build/sora/build/libs/sora-webflux-0.0.1-SNAPSHOT.jar app.jar
+
+# 빌드된 JAR 복사 (경로 주의!)
+COPY --from=build /build/sora-webflux/build/libs/sora-webflux-0.0.1-SNAPSHOT.jar app.jar
+
+# Spring Boot 실행 (docker 프로파일)
 ENTRYPOINT ["java", "-Dspring.profiles.active=docker", "-jar", "app.jar"]
 EXPOSE 8080

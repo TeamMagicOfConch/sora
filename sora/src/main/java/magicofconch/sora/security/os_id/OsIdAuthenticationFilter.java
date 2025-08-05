@@ -71,8 +71,8 @@ public class OsIdAuthenticationFilter extends AbstractAuthenticationProcessingFi
 		CustomUserDetails userDetails = (CustomUserDetails) authResult.getDetails();
 		String uuid = userDetails.getUuid();
 
-		String accessToken = jwtUtil.generateAccessToken(uuid, UserRole.ROLE_USER.getRoleName());
-		String refreshToken = jwtUtil.generateRefreshToken(uuid, UserRole.ROLE_USER.getRoleName());
+		String accessToken = jwtUtil.generateAccessToken(uuid, UserRole.ROLE_USER.getRoleName(),  userDetails.getUsername());
+		String refreshToken = jwtUtil.generateRefreshToken(uuid, UserRole.ROLE_USER.getRoleName(),   userDetails.getUsername());
 
 		response.setHeader("Access-Token", "Bearer " + accessToken);
 		response.setHeader("Refresh-Token", "Bearer " + refreshToken);
@@ -81,10 +81,6 @@ public class OsIdAuthenticationFilter extends AbstractAuthenticationProcessingFi
 		log.info("[OsIdAuthenticationFilter - successfulAuthentication] - refreshToken={}", refreshToken);
 
 
-		// 명시적으로 SecurityContext에 설정
-		/*SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-		securityContext.setAuthentication(authResult);
-		SecurityContextHolder.setContext(securityContext);*/
 		log.info("[OsIdAuthenticationFilter - successfulAuthentication] - Authentication set in SecurityContext: {}", authResult);
 
 		chain.doFilter(request, response);

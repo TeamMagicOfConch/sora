@@ -3,6 +3,7 @@ package magicofconch.sora.review.service;
 import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import magicofconch.sora.review.dto.req.SaveReq;
 import magicofconch.sora.review.dto.req.SubmitReq;
 import magicofconch.sora.review.dto.res.InquiryDayRes;
 import magicofconch.sora.review.dto.res.InquiryMonthRes;
@@ -81,6 +82,29 @@ public class ReviewService {
             throw new BusinessException(ResponseCode.REVIEW_GENERAL_FAIL);
         }
 
+        Review review = Review.builder()
+                .userInfo(userInfo)
+                .body(encryptBody)
+                .feedbackType(req.getType())
+                .feedback(encryptFeedback)
+                .reviewDate(req.getReviewDate())
+                .build();
+
+        reviewRepository.save(review);
+    }
+
+    @Transactional
+    public void saveReview(SaveReq req) {
+        String encryptFeedback;
+        String encryptBody;
+        try {
+            encryptBody = encryptionUtil.encrypt(req.getBody());
+            encryptFeedback = encryptionUtil.encrypt(req.getFeedback());
+        } catch (Exception e) {
+            throw new BusinessException(ResponseCode.REVIEW_GENERAL_FAIL);
+        }
+
+        UserInfo userInfo = securityUtil.getCurrentUsersEntity();
         Review review = Review.builder()
                 .userInfo(userInfo)
                 .body(encryptBody)
