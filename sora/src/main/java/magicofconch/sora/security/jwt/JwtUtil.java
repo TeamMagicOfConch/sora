@@ -1,148 +1,162 @@
 package magicofconch.sora.security.jwt;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
-import jakarta.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import lombok.extern.slf4j.Slf4j;
-import magicofconch.sora.security.dto.res.TokenDto;
-import magicofconch.sora.security.os_id.OsIdAuthenticationToken;
-import magicOfConch.enums.UserRole;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
+import magicOfConch.enums.UserRole;
+import magicofconch.sora.security.dto.res.TokenDto;
+import magicofconch.sora.security.os_id.OsIdAuthenticationToken;
 
 @Slf4j
 @Component
 public class JwtUtil {
 
-    private SecretKey secretKey;
+	public long REFRESH_TOKEN_EXPIRATION;
+	public long ACCESS_TOKEN_EXPIRATION;
+	private SecretKey secretKey;
+	@Value("${jwt.expiration.access}")
+	private String accessTokenExpirationTime;
+	@Value("${jwt.expiration.refresh}")
+	private String refreshTokenExpirationTime;
 
+	public JwtUtil(@Value("${jwt.secret}") String secret) {
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			byte[] hash = digest.digest(secret.getBytes(StandardCharsets.UTF_8));
 
-    @Value("${jwt.expiration.access}")
-    private String accessTokenExpirationTime;
+			secretKey = new SecretKeySpec(hash, "HmacSHA256");
 
-    @Value("${jwt.expiration.refresh}")
-    private String refreshTokenExpirationTime;
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("SHA-256 algorithm not found.", e);
+		}
+	}
 
-    public long REFRESH_TOKEN_EXPIRATION;
-    public long ACCESS_TOKEN_EXPIRATION;
+	@PostConstruct
+	public void init() {
+		REFRESH_TOKEN_EXPIRATION = TimeUnit.MINUTES.toMillis(
+			Integer.parseInt(refreshTokenExpirationTime));
+		ACCESS_TOKEN_EXPIRATION = TimeUnit.MINUTES.toMillis(
+			Integer.parseInt(accessTokenExpirationTime));
+	}
 
-    @PostConstruct
-    public void init() {
-        REFRESH_TOKEN_EXPIRATION = TimeUnit.MINUTES.toMillis(
-                Integer.parseInt(refreshTokenExpirationTime));
-        ACCESS_TOKEN_EXPIRATION = TimeUnit.MINUTES.toMillis(
-                Integer.parseInt(accessTokenExpirationTime));
-    }
+	public String getUsername(String token) {
+		return Jwts.parser()
+			.verifyWith(secretKey)
+			.build()
+			.parseSignedClaims(token)
+			.getPayload()
+			.get("username", String.class);
+	}
 
+	public String getUUID(String token) {
+		return Jwts.parser()
+			.verifyWith(secretKey)
+			.build()
+			.parseSignedClaims(token)
+			.getPayload()
+			.get("uuid", String.class);
+	}
 
-    public JwtUtil(@Value("${jwt.secret}") String secret) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(secret.getBytes(StandardCharsets.UTF_8));
+	public String getRole(String token) {
+		return Jwts.parser()
+			.verifyWith(secretKey)
+			.build()
+			.parseSignedClaims(token)
+			.getPayload()
+			.get("role", String.class);
+	}
 
-            secretKey = new SecretKeySpec(hash, "HmacSHA256");
+	public Boolean isExpired(String token) {
+		return Jwts.parser()
+			.verifyWith(secretKey)
+			.build()
+			.parseSignedClaims(token)
+			.getPayload()
+			.getExpiration()
+			.before(new Date());
+	}
 
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("SHA-256 algorithm not found.", e);
-        }
-    }
+	public String generateAccessToken(String uuid, UserRole role, String username) {
+		return Jwts.builder()
+			.claim("uuid", uuid)
+			.claim("role", role.getRoleName())
+			.claim("username", username)
+			.claim("category", "access")
+			.issuedAt(new Date())
+			.expiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
+			.signWith(secretKey)
+			.compact();
+	}
 
-    public String getUsername(String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .get("username", String.class);
-    }
+	public String generateRefreshToken(String uuid, UserRole role, String username) {
+		return Jwts.builder()
+			.claim("uuid", uuid)
+			.claim("role", role.getRoleName())
+			.claim("username", username)
+			.claim("category", "refresh")
+			.issuedAt(new Date())
+			.expiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
+			.signWith(secretKey)
+			.compact();
+	}
 
-    public String getUUID(String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .get("uuid", String.class);
-    }
+	public TokenDto generateUserTokenDto(OsIdAuthenticationToken authentication) {
 
-    public String getRole(String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .get("role", String.class);
-    }
+		String uuid = authentication.getUserDetails().getUuid();
+		String username = authentication.getUserDetails().getUsername();
 
-    public Boolean isExpired(String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getExpiration()
-                .before(new Date());
-    }
+		String accessToken = generateAccessToken(uuid, UserRole.ROLE_USER, username);
+		String refreshToken = generateRefreshToken(uuid, UserRole.ROLE_USER, username);
 
-    public String generateAccessToken(String uuid, String role, String username) {
-        return Jwts.builder()
-                .claim("uuid", uuid)
-                .claim("role", role)
-                .claim("username", username)
-                .claim("category", "access")
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
-                .signWith(secretKey)
-                .compact();
-    }
+		return new TokenDto(accessToken, refreshToken);
+	}
 
-    public String generateRefreshToken(String uuid, String role, String username) {
-        return Jwts.builder()
-                .claim("uuid", uuid)
-                .claim("role", role)
-                .claim("username", username)
-                .claim("category", "refresh")
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
-                .signWith(secretKey)
-                .compact();
-    }
+	public TokenDto generateTokenDtoWithRole(OsIdAuthenticationToken authentication, UserRole userRole) {
+		String uuid = authentication.getUserDetails().getUuid();
+		String username = authentication.getUserDetails().getUsername();
 
-    public TokenDto generateTokenDto(OsIdAuthenticationToken authentication) {
+		String accessToken = generateAccessToken(uuid, userRole, username);
+		String refreshToken = generateRefreshToken(uuid, userRole, username);
 
-        String uuid = authentication.getUserDetails().getUuid();
-        String username = authentication.getUserDetails().getUsername();
+		return new TokenDto(accessToken, refreshToken);
+	}
 
-        String accessToken = generateAccessToken(uuid, UserRole.ROLE_USER.getRoleName(), username);
-        String refreshToken = generateRefreshToken(uuid, UserRole.ROLE_USER.getRoleName(), username);
+	public TokenDto generateTokenDtoWithRole(String uuid, String username, UserRole userRole) {
+		String accessToken = generateAccessToken(uuid, userRole, username);
+		String refreshToken = generateRefreshToken(uuid, userRole, username);
 
-        return new TokenDto(accessToken, refreshToken);
+		return new TokenDto(accessToken, refreshToken);
+	}
 
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token);
-            return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT Token", e);
-        } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token", e);
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token", e);
-        } catch (IllegalArgumentException e) {
-            log.info("JWT claims string is empty.", e);
-        }
-        return false;
-    }
+	public boolean validateToken(String token) {
+		try {
+			Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token);
+			return true;
+		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+			log.info("Invalid JWT Token", e);
+		} catch (ExpiredJwtException e) {
+			log.info("Expired JWT Token", e);
+		} catch (UnsupportedJwtException e) {
+			log.info("Unsupported JWT Token", e);
+		} catch (IllegalArgumentException e) {
+			log.info("JWT claims string is empty.", e);
+		}
+		return false;
+	}
 }
 
