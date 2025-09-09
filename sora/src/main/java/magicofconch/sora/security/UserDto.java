@@ -14,10 +14,10 @@ public class UserDto {
 	private String role;
 	private String username;
 
-	public static UserDto fromUserInfo(UserInfo userInfo, String osId){
+	public static UserDto fromUserInfo(UserInfo userInfo, String osId) {
 		return UserDto.builder()
 			.uuid(userInfo.getUuid())
-			.role(userInfo.getRole())
+			.role(userInfo.getRole().getRoleName())
 			.osId(osId)
 			.username(userInfo.getUsername())
 			.build();

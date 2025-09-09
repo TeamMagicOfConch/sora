@@ -17,7 +17,7 @@ public class CustomUserDetails implements UserDetails, Serializable {
 
 	private UserDto userDto;
 
-	public CustomUserDetails(UserDto userDto){
+	public CustomUserDetails(UserDto userDto) {
 		this.userDto = userDto;
 	}
 
@@ -38,7 +38,7 @@ public class CustomUserDetails implements UserDetails, Serializable {
 		return userDto.getUsername();
 	}
 
-	public String getUuid(){
+	public String getUuid() {
 		return userDto.getUuid();
 	}
 }
