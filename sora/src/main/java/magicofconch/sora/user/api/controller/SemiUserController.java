@@ -24,7 +24,7 @@ public class SemiUserController {
 
 	@PutMapping("/streak")
 	@Operation(summary = "semi-user streak 등록", description = "streak이 등록되지 않은 semi-user의 streak 등록 기능")
-	public Response<?> registerStreak(@Valid @RequestBody StreakReq streakReq) {
+	public Response<TokenDto> registerStreak(@Valid @RequestBody StreakReq streakReq) {
 		TokenDto response = streakService.upsert(streakReq);
 
 		return Response.ok(response);
