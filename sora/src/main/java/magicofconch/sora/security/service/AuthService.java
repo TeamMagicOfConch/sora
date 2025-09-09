@@ -52,12 +52,12 @@ public class AuthService {
 			.uuid(UUID.randomUUID().toString())
 			.username(registerReq.getUsername())
 			.initialReviewCount(registerReq.getInitialReviewCount())
-			.role(UserRole.ROLE_USER)
+			.role(UserRole.ROLE_SEMI_USER)
 			.build();
 
-		String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), UserRole.ROLE_USER,
+		String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), UserRole.ROLE_SEMI_USER,
 			userInfo.getUsername());
-		String refreshToken = jwtUtil.generateRefreshToken(userInfo.getUuid(), UserRole.ROLE_USER,
+		String refreshToken = jwtUtil.generateRefreshToken(userInfo.getUuid(), UserRole.ROLE_SEMI_USER,
 			userInfo.getUsername());
 
 		userInfo.updateRefreshToken(refreshToken);

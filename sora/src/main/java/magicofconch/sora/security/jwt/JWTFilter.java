@@ -27,7 +27,10 @@ public class JWTFilter extends OncePerRequestFilter {
 	private final String BEARER_PREFIX = "Bearer ";
 	private final List<String> WHITE_LIST = List.of(
 		"/test",
-		"/user"
+		"/user",
+		"/swagger-ui",
+		"/swagger-ui.html",
+		"/api-docs"
 	);
 
 	public JWTFilter(JwtUtil jwtUtil) {

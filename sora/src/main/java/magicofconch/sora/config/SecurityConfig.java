@@ -48,7 +48,8 @@ public class SecurityConfig {
 
 		// 경로별 인가
 		http.authorizeHttpRequests((auth) -> auth
-			.requestMatchers("/test/api/**", "/user/**").permitAll()
+			.requestMatchers("/test/api/**", "/user/**", "/swagger-ui.html", "/swagger-ui/**", "/api-docs",
+				"/api-docs/**").permitAll()
 			.requestMatchers("/auth/semi/**").hasAnyRole("SEMI_USER", "USER")
 			.requestMatchers("/auth/user/**").hasRole("USER")
 			.anyRequest().authenticated());
