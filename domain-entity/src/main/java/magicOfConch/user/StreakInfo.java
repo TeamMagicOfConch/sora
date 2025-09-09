@@ -13,10 +13,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "streak_info")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -44,4 +47,12 @@ public class StreakInfo {
 	@Column(length = 25)
 	@Comment("사용자 목표 정체성")
 	private String aspiration;
+
+	@Builder
+	public StreakInfo(String reviewTime, LocalDateTime reviewAt, String writeLocation, String aspiration) {
+		this.reviewTime = reviewTime;
+		this.reviewAt = reviewAt;
+		this.writeLocation = writeLocation;
+		this.aspiration = aspiration;
+	}
 }

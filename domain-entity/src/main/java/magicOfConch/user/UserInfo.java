@@ -75,4 +75,12 @@ public class UserInfo extends BaseEntity {
 		this.refreshToken = refreshToken;
 	}
 
+	public void updateStreakInfo(StreakInfo streakInfo) {
+		this.streakInfo = streakInfo;
+	}
+
+	public void updateRole(UserRole role) {
+		this.role = role;
+	}
+
 }

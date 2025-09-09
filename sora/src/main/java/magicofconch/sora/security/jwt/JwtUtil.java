@@ -136,6 +136,13 @@ public class JwtUtil {
 		return new TokenDto(accessToken, refreshToken);
 	}
 
+	public TokenDto generateTokenDtoWithRole(String uuid, String username, UserRole userRole) {
+		String accessToken = generateAccessToken(uuid, userRole, username);
+		String refreshToken = generateRefreshToken(uuid, userRole, username);
+
+		return new TokenDto(accessToken, refreshToken);
+	}
+
 	public boolean validateToken(String token) {
 		try {
 			Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token);
