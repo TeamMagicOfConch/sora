@@ -1,6 +1,6 @@
 package magicOfConch.user;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.hibernate.annotations.Comment;
 
@@ -38,7 +38,7 @@ public class StreakInfo {
 	private String reviewTime;
 
 	@Comment("사용자가 정의한 리뷰 작성 시간")
-	private LocalDateTime reviewAt;
+	private LocalTime reviewAt;
 
 	@Column(length = 25)
 	@Comment("희망 리뷰 작성 장소")
@@ -49,7 +49,7 @@ public class StreakInfo {
 	private String aspiration;
 
 	@Builder
-	public StreakInfo(String reviewTime, LocalDateTime reviewAt, String writeLocation, String aspiration) {
+	public StreakInfo(String reviewTime, LocalTime reviewAt, String writeLocation, String aspiration) {
 		this.reviewTime = reviewTime;
 		this.reviewAt = reviewAt;
 		this.writeLocation = writeLocation;

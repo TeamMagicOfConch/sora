@@ -1,6 +1,6 @@
 package magicofconch.sora.user.api.dto.req;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +15,7 @@ public class StreakReq {
 	private String reviewTime;
 
 	@NotNull
-	private LocalDateTime reviewAt;
+	private LocalTime reviewAt;
 
 	@NotBlank
 	private String writeLocation;
