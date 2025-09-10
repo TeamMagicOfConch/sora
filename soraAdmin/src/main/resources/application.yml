@@ -1,0 +1,39 @@
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: ${COOKIE_SAME_SITE}
+
+spring:
+  application:
+    name: soraAdmin
+
+  ### for JPA
+  jpa:
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+    generate-ddl: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+
+encryption:
+  algorithm: AES
+  transformation: AES/GCM/NoPadding
+  key-size: 256
+  iv-size: 12
+  tag-length: 128
+  secret: ${AES_SECRET}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

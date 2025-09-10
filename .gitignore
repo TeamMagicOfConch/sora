@@ -23,7 +23,6 @@ bin/
 
 ## for env ##
 *.env
-**/application.yml
 **/gradle/*
 
 

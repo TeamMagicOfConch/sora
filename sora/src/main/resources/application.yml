@@ -1,0 +1,70 @@
+### for ai prompt
+prompt:
+  sora-type:
+    T: ${PROMPT_T}
+    F: ${PROMPT_F}
+
+spring:
+  cloud:
+    function:
+      scan:
+        enabled: false
+
+  ### for jpa
+  jpa:
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
+    generate-ddl: true
+
+  ### for mysql driver
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+  ### for redis
+  data:
+    redis:
+      host: redis
+      port: ${SPRING_REDIS_PORT}
+      password: ${SPRING_REDIS_PASSWORD}
+      repositories:
+        enabled: false
+
+  ### for spring-ai _openai
+  ai:
+    openai:
+      chat:
+        options:
+          model: ${OPEN_AI_MODEL}
+        project-id: ${OPEN_AI_PROJECT}
+      api-key: ${OPEN_AI_API_KEY}
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
+
+### for jwt secret
+jwt:
+  secret: ${JWT_SECRET}
+  expiration:
+    access: ${JWT_ACCESS_EXP}
+    refresh: ${JWT_REFRESH_EXP}
+
+encryption:
+  algorithm: AES
+  transformation: AES/GCM/NoPadding
+  key-size: 256
+  iv-size: 12
+  tag-length: 128
+  secret: ${AES_SECRET}
