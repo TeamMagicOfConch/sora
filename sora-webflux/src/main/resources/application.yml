@@ -1,0 +1,19 @@
+prompt:
+  sora-type:
+    T: ${PROMPT_T}
+    F: ${PROMPT_F}
+
+
+spring:
+  ai:
+    openai:
+      api-key: ${OPEN_AI_API_KEY}
+      chat:
+        options:
+          model: ${OPEN_AI_MODEL}
+        project-id: ${OPEN_AI_PROJECT}
+jwt:
+  secret: ${JWT_SECRET}
+  expiration:
+    access: ${JWT_ACCESS_EXP}
+    refresh: ${JWT_REFRESH_EXP}

@@ -17,7 +17,7 @@ import magicofconch.sora.util.Response;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth/semi/user")
+@RequestMapping("/auth/semi")
 public class SemiUserController {
 
 	private final StreakService streakService;

@@ -38,31 +38,23 @@ dependencies {
     //for Database
     runtimeOnly 'com.mysql:mysql-connector-j'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter:0.8.1'
-
 
     // for security
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
-    // for web flux
-    // implementation 'org.springframework.boot:spring-boot-starter-webflux'
-
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
     implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
-    // ✅ openai + function-context 제외
-    implementation('org.springframework.ai:spring-ai-openai-spring-boot-starter:0.8.1') {
-        exclude group: 'org.springframework.cloud', module: 'spring-cloud-function-context'
-    }
-
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
+    //Swagger
+    implementation(platform("org.springdoc:springdoc-openapi-bom:2.8.9"))
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
 
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
