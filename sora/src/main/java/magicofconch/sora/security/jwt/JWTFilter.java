@@ -29,8 +29,14 @@ public class JWTFilter extends OncePerRequestFilter {
 		"/test",
 		"/user",
 		"/swagger-ui",
+		"/swagger-ui/",
 		"/swagger-ui.html",
-		"/api-docs"
+		"/swagger-ui/",
+		"/api-docs",
+		"/api-docs/",
+		"/api-docs/swagger-config",
+		"/v3/api-docs",
+		"/v3/api-docs/"
 	);
 
 	public JWTFilter(JwtUtil jwtUtil) {
