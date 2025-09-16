@@ -1,4 +1,4 @@
-package magicofconch.sora.review.dto.res;
+package magicofconch.sora.review.api.dto.res;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
