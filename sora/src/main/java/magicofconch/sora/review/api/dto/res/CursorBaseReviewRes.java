@@ -11,5 +11,7 @@ import magicofconch.sora.review.domain.dto.ReviewItemDto;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CursorBaseReviewRes {
-	private List<ReviewItemDto> reviews;
+	List<ReviewItemDto> items;
+	Boolean hasNext;
+	String nextCursor;
 }

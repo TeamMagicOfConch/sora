@@ -31,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import magicofconch.sora.review.api.dto.req.SaveReq;
 import magicofconch.sora.review.api.dto.req.SubmitReq;
+import magicofconch.sora.review.api.dto.res.CursorBaseReviewRes;
 import magicofconch.sora.review.api.dto.res.InquiryDayRes;
 import magicofconch.sora.review.api.dto.res.InquiryMonthRes;
 import magicofconch.sora.review.api.dto.res.ReviewRes;
@@ -74,7 +75,11 @@ public class ReviewController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/auth/user/")
+	@GetMapping("/auth/user/review")
+	public ResponseEntity list(@RequestParam(required = false, name = "after") String after) {
+		CursorBaseReviewRes res = reviewService.listByDateDesc(after);
+		return ResponseEntity.ok(Response.ok(res));
+	}
 
 	@PostMapping(value = "/auth/user/api/review/submit", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter submitReview(@RequestBody String requestBody, HttpServletResponse response) {
