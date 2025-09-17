@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,5 +23,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
 	Optional<Review> findReviewByReviewDateAndUserInfo(LocalDate reviewDate, UserInfo userInfo);
 
-	List<Review> findByUserInfo(UserInfo userInfo);
+	List<Review> findAllByUserInfo_IdAndReviewDateLessThanEqualOrderByReviewDateDesc(
+		Long userId, LocalDate cursorDate, Pageable pageable);
+
+	List<Review> findAllByUserInfo_IdOrderByReviewDateDesc(Long userId, Pageable pageable);
+
 }

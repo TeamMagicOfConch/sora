@@ -26,6 +26,7 @@ public enum ResponseCode {
 	REVIEW_ALREADY_EXIST(400, "RVW-001", HttpStatus.BAD_REQUEST, "Review is already exist"),
 	REVIEW_NOT_EXIST(400, "RVW-002", HttpStatus.BAD_REQUEST, "Review is not exist"),
 	REVIEW_JSON_ERROR(400, "RVW-003", HttpStatus.BAD_REQUEST, "Can't resolve request body"),
+	REVIEW_INQUIRY_PARAM_WRONG(400, "RVW-004", HttpStatus.BAD_REQUEST, "Inquiry param is wrong"),
 
 	//Streak
 	STREAK_NOT_REGISTERED(400, "STR-004", HttpStatus.BAD_REQUEST, "Stream is already registered"),
