@@ -68,3 +68,6 @@ encryption:
   iv-size: 12
   tag-length: 128
   secret: ${AES_SECRET}
+
+firebase:
+  credentials: ${FIREBASE_CREDENTIAL}

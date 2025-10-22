@@ -3,6 +3,7 @@ package magicofconch.sora.config;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.google.auth.oauth2.GoogleCredentials;
@@ -14,17 +15,21 @@ import jakarta.annotation.PostConstruct;
 @Component
 public class FirebaseInitializer {
 
+	@Value("${firebase.credentials}")
+	private String firebaseCredentialPath;
+
 	@PostConstruct
 	public void init() throws IOException {
-		FileInputStream serviceAccount =
-			new FileInputStream("src/main/resources/firebase-adminsdk.json");
+		try (FileInputStream serviceAccount = new FileInputStream(firebaseCredentialPath)) {
+			FirebaseOptions options = FirebaseOptions.builder()
+				.setCredentials(GoogleCredentials.fromStream(serviceAccount))
+				.build();
 
-		FirebaseOptions options = FirebaseOptions.builder()
-			.setCredentials(GoogleCredentials.fromStream(serviceAccount))
-			.build();
-
-		if (FirebaseApp.getApps().isEmpty()) {
-			FirebaseApp.initializeApp(options);
+			if (FirebaseApp.getApps().isEmpty()) {
+				FirebaseApp.initializeApp(options);
+			}
 		}
 	}
+
 }
+

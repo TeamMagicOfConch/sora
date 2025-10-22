@@ -19,6 +19,10 @@ configurations {
     }
 }
 
+ext {
+    springBatchVersion = '3.5.6'
+}
+
 repositories {
     mavenCentral()
     maven { url 'https://repo.spring.io/milestone' }
@@ -40,22 +44,31 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    //Spring Batch
+    implementation("org.springframework.boot:spring-boot-starter-batch:${springBatchVersion}")
+    testImplementation 'org.springframework.batch:spring-batch-test'
+
+    //OpenAI
     implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter:0.8.1'
 
     // for security
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    //JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
     implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
+    //Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     //Swagger
     implementation(platform("org.springdoc:springdoc-openapi-bom:2.8.9"))
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
 
+    //FCM Admin SDK
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
