@@ -49,7 +49,7 @@ public class SoraService {
 		String username = jwtUtil.getUsername(token);
 		String prompt = (req.getType() == FeedbackType.FEELING ? promptAsF : promptAsT);
 		// .replace("{name}", username) + "\n" + req.getBody();
-		
+
 		AtomicReference<StringBuilder> bufferRef = new AtomicReference<>(new StringBuilder());
 
 		return chatClient.stream(prompt)
@@ -78,7 +78,7 @@ public class SoraService {
 		SaveReq saveReq = new SaveReq(req.getBody(), req.getType(), req.getReviewDate(), feedback);
 
 		webClient.post()
-			.uri("http://sora-app-1:8080/auth/user/review")
+			.uri("http://sora-app:8080/auth/user/review")
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
 			.bodyValue(saveReq)
