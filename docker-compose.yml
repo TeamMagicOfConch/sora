@@ -2,66 +2,71 @@ version: '3.8'
 
 services:
   app:
+    container_name: sora-app
     build:
       context: .
       dockerfile: Dockerfile.sora
     ports:
-      - "8080:8080"
+      - "43000:8080"
     depends_on:
       - mysql
     env_file:
       - .env
     networks:
-      - backend
+      - sora-network
     environment:
       TZ: Asia/Seoul
 
   admin:
+    container_name: sora-admin
     build:
       context: .
       dockerfile: Dockerfile.admin
     ports:
-      - "8090:8080"
+      - "43002:8080"
     depends_on:
       - mysql
     env_file:
       - .env
     networks:
-      - backend
+      - sora-network
     environment:
       TZ: Asia/Seoul
 
   sora-webflux:
+    container_name: sora-webflux
     build:
       context: .
       dockerfile: Dockerfile.sora-webflux
     ports:
-      - "8081:8080"
+      - "43001:8080"
     depends_on:
       - mysql
     env_file:
       - .env
     networks:
-      - backend
+      - sora-network
     environment:
       TZ: Asia/Seoul
 
   mysql:
+    container_name: sora-mysql
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       MYSQL_DATABASE: ${SPRING_DATASOURCE_DATABASE}
       TZ: Asia/Seoul
     ports:
-      - "3306:3306"
+      - "43100:3306"
     volumes:
-      - mysql-data:/var/lib/mysql
+      - sora-mysql:/var/lib/mysql
       - ./my.cnf:/etc/mysql/my.cnf
     networks:
-      - backend
+      - sora-network
 
 networks:
-  backend:
+  sora-network:
+    external: yes
 
 volumes:
-  mysql-data:
+  sora-mysql:
