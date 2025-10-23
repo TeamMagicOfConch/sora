@@ -23,8 +23,9 @@
 
 🐚 소라의 마법에서는 사용자가 작성한 회고 내용에 대해 **AI Agent**인 소라가 응답을 제공합니다. 내가 원하는 **성격**의 소라와 이야기를 하다 보면, 마법처럼 **회고 습관을 쉽고 재미있게** 그리고 확실하게 만들 수 있을 거예요!
 
-# 🎈 주요 기능
+<a href="https://magicofconch.notion.site/fae88808dbe2490ca833fb4ef6cc49c1?pvs=74"> 서비스 공식 페이지 </a> 
 
+# 🎈 주요 기능
 
 ## 회고 작성 및 AI 리뷰 
 
@@ -43,9 +44,9 @@
 
 
 ## 기술 스택 & 아키텍처
-
-<img src="https://github.com/COMAtching/.github/blob/main/assets/comatching_diagram.png?raw=true">
+![architecture](./readme/architecture.png)
 
 ## ERD 설계
+![erd](./readme/sora-erd.png)
 
-<img src="https://github.com/COMAtching/.github/blob/main/assets/erd.png?raw=true">
+
