@@ -24,6 +24,7 @@ bin/
 ## for env ##
 *.env
 **/gradle/*
+**/src/main/resources/firebase/**
 
 
 ### IntelliJ IDEA ###
