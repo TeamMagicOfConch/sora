@@ -87,13 +87,12 @@ public class AuthService {
 		UserInfo user = userInfoRepository.findUserInfoByUuid(uuid)
 			.orElseThrow(() -> new BusinessException(ResponseCode.USER_NOT_FOUND));
 
-		UserRole role;
-
-		if (validOnboardingInfo(user.getStreakInfo())) {
-			role = UserRole.ROLE_USER;
-		} else {
-			role = UserRole.ROLE_SEMI_USER;
-		}
+		UserRole role = user.getRole();
+		// if (validOnboardingInfo(user.getStreakInfo())) {
+		// 	role = UserRole.ROLE_USER;
+		// } else {
+		// 	role = UserRole.ROLE_SEMI_USER;
+		// }
 
 		TokenDto tokenDto = jwtUtil.generateTokenDtoWithRole(osIdAuthenticationToken, role);
 
