@@ -60,6 +60,7 @@ public class JWTFilter extends OncePerRequestFilter {
 			accessToken = resolveAccessToken(request);
 			jwtUtil.isExpired(accessToken);
 		} catch (JwtException e) {
+			log.warn("JWT Token is invalid");
 			PrintWriter writer = response.getWriter();
 			writer.print("UnAuthorized");
 
