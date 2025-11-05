@@ -47,8 +47,8 @@ public class SoraService {
 		}
 
 		String username = jwtUtil.getUsername(token);
-		String prompt = (req.getType() == FeedbackType.FEELING ? promptAsF : promptAsT);
-		// .replace("{name}", username) + "\n" + req.getBody();
+		String prompt = (req.getType() == FeedbackType.FEELING ? promptAsF : promptAsT)
+			.replace("{name}", username) + "\n" + req.getBody();
 
 		AtomicReference<StringBuilder> bufferRef = new AtomicReference<>(new StringBuilder());
 
