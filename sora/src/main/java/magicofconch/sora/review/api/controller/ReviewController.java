@@ -43,6 +43,7 @@ public class ReviewController {
 
 	@GetMapping("/auth/user/api/review/inquiry/month")
 	public Response<List<InquiryMonthRes>> inquiryMonth(@RequestParam int year, int month) {
+		log.info("Inquiry month controller");
 		return Response.ok(reviewService.inquiryMonthly(year, month));
 	}
 
