@@ -8,7 +8,8 @@ COPY . .
 RUN gradle :sora-webflux:bootJar
 
 # 실행용 이미지
-FROM openjdk:17-jdk-slim
+# FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /app
 
 # 빌드된 JAR 복사 (경로 주의!)
