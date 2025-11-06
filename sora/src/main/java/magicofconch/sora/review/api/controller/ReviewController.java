@@ -6,8 +6,6 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,12 +43,6 @@ public class ReviewController {
 	public Response<List<InquiryMonthRes>> inquiryMonth(@RequestParam int year, int month) {
 		log.info("Inquiry month controller");
 		return Response.ok(reviewService.inquiryMonthly(year, month));
-	}
-
-	@GetMapping("/auth/user/test/security")
-	public ResponseEntity<?> testSecurity() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		return ResponseEntity.ok(authentication);
 	}
 
 	@PostMapping("/auth/user/review")
