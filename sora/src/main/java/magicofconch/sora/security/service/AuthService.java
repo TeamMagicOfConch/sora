@@ -18,7 +18,6 @@ import magicofconch.sora.security.dto.res.TokenDto;
 import magicofconch.sora.security.jwt.JwtUtil;
 import magicofconch.sora.security.os_id.OsIdAuthenticationToken;
 import magicofconch.sora.user.repository.OsAuthInfoRepository;
-import magicofconch.sora.user.repository.StreakInfoRepository;
 import magicofconch.sora.user.repository.UserInfoRepository;
 import magicofconch.sora.util.ResponseCode;
 import magicofconch.sora.util.SecurityUtil;
@@ -31,7 +30,6 @@ public class AuthService {
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 	private final UserInfoRepository userInfoRepository;
 	private final OsAuthInfoRepository osAuthInfoRepository;
-	private final StreakInfoRepository streakInfoRepository;
 	private final JwtUtil jwtUtil;
 	private final SecurityUtil securityUtil;
 
@@ -47,17 +45,30 @@ public class AuthService {
 			.osType(registerReq.getOsType())
 			.build();
 
+		// UserInfo userInfo = UserInfo.builder()
+		// 	.osAuthInfo(osAuthInfo)
+		// 	.uuid(UUID.randomUUID().toString())
+		// 	.username(registerReq.getUsername())
+		// 	.initialReviewCount(registerReq.getInitialReviewCount())
+		// 	.role(UserRole.ROLE_SEMI_USER)
+		// 	.build();
+		//
+		// String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), UserRole.ROLE_SEMI_USER,
+		// 	userInfo.getUsername());
+		// String refreshToken = jwtUtil.generateRefreshToken(userInfo.getUuid(), UserRole.ROLE_SEMI_USER,
+		// 	userInfo.getUsername());
+
 		UserInfo userInfo = UserInfo.builder()
 			.osAuthInfo(osAuthInfo)
 			.uuid(UUID.randomUUID().toString())
 			.username(registerReq.getUsername())
 			.initialReviewCount(registerReq.getInitialReviewCount())
-			.role(UserRole.ROLE_SEMI_USER)
+			.role(UserRole.ROLE_USER)
 			.build();
 
-		String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), UserRole.ROLE_SEMI_USER,
+		String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), UserRole.ROLE_USER,
 			userInfo.getUsername());
-		String refreshToken = jwtUtil.generateRefreshToken(userInfo.getUuid(), UserRole.ROLE_SEMI_USER,
+		String refreshToken = jwtUtil.generateRefreshToken(userInfo.getUuid(), UserRole.ROLE_USER,
 			userInfo.getUsername());
 
 		userInfo.updateRefreshToken(refreshToken);
