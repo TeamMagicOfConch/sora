@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +38,7 @@ public class AuthController {
 		@ApiResponse(responseCode = "200", description = "로그인 성공"),
 		@ApiResponse(responseCode = "404", description = "로그인 실패 실패(os_id에 대한 유저 미확인)")
 	})
-	public Response<AuthRes> login(@RequestBody @Parameter(description = "로그인 os_id") LoginReq req) {
+	public Response<AuthRes> login(@RequestBody LoginReq req) {
 		AuthRes auth = authService.login(req);
 		return Response.ok(auth);
 	}
