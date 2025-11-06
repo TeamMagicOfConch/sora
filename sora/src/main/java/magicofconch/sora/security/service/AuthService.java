@@ -96,7 +96,7 @@ public class AuthService {
 		String uuid = osIdAuthenticationToken.getUserDetails().getUuid();
 
 		UserInfo user = userInfoRepository.findUserInfoByUuid(uuid)
-			.orElseThrow(() -> new BusinessException(ResponseCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(ResponseCode.LOGIN_FAIL));
 
 		UserRole role = user.getRole();
 		// if (validOnboardingInfo(user.getStreakInfo())) {
