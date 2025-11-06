@@ -33,8 +33,12 @@ public class StreakInfo {
 	@OneToOne(mappedBy = "streakInfo", fetch = FetchType.LAZY)
 	private UserInfo userInfo;
 
+	/**
+	 * @deprecated :
+	 */
 	@Column(length = 25)
 	@Comment("사용자가 정의한 리뷰 작성시간명")
+	@Deprecated
 	private String reviewTime;
 
 	@Comment("사용자가 정의한 리뷰 작성 시간")
