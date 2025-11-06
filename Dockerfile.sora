@@ -3,7 +3,8 @@ WORKDIR /build
 COPY . .
 RUN gradle :sora:bootJar
 
-FROM openjdk:17-jdk-slim
+# FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /app
 COPY --from=build /build/sora/build/libs/sora-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java", "-Dspring.profiles.active=docker", "-jar", "app.jar"]
