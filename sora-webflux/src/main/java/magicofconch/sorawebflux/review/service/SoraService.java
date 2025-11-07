@@ -35,6 +35,9 @@ public class SoraService {
 	@Value("${prompt.sora-type.F}")
 	private String promptAsF;
 
+	@Value("${sora.srv.url}")
+	private String appServer;
+
 	/**
 	 * open-ai 스트리밍 메서드
 	 *
@@ -78,7 +81,7 @@ public class SoraService {
 		SaveReq saveReq = new SaveReq(req.getBody(), req.getType(), req.getReviewDate(), feedback);
 
 		webClient.post()
-			.uri("http://sora-app:8080/auth/user/review")
+			.uri(appServer)
 			.contentType(MediaType.APPLICATION_JSON)
 			.header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
 			.bodyValue(saveReq)

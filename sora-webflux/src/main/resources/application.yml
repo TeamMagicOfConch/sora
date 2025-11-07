@@ -17,3 +17,7 @@ jwt:
   expiration:
     access: ${JWT_ACCESS_EXP}
     refresh: ${JWT_REFRESH_EXP}
+
+sora:
+  srv:
+    url: ${SORA_SRV_URL}
