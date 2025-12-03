@@ -45,31 +45,31 @@ public class AuthService {
 			.osType(registerReq.getOsType())
 			.build();
 
-		// UserInfo userInfo = UserInfo.builder()
-		// 	.osAuthInfo(osAuthInfo)
-		// 	.uuid(UUID.randomUUID().toString())
-		// 	.username(registerReq.getUsername())
-		// 	.initialReviewCount(registerReq.getInitialReviewCount())
-		// 	.role(UserRole.ROLE_SEMI_USER)
-		// 	.build();
-		//
-		// String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), UserRole.ROLE_SEMI_USER,
-		// 	userInfo.getUsername());
-		// String refreshToken = jwtUtil.generateRefreshToken(userInfo.getUuid(), UserRole.ROLE_SEMI_USER,
-		// 	userInfo.getUsername());
-
 		UserInfo userInfo = UserInfo.builder()
 			.osAuthInfo(osAuthInfo)
 			.uuid(UUID.randomUUID().toString())
 			.username(registerReq.getUsername())
 			.initialReviewCount(registerReq.getInitialReviewCount())
-			.role(UserRole.ROLE_USER)
+			.role(UserRole.ROLE_SEMI_USER)
 			.build();
 
-		String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), UserRole.ROLE_USER,
+		String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), UserRole.ROLE_SEMI_USER,
 			userInfo.getUsername());
-		String refreshToken = jwtUtil.generateRefreshToken(userInfo.getUuid(), UserRole.ROLE_USER,
+		String refreshToken = jwtUtil.generateRefreshToken(userInfo.getUuid(), UserRole.ROLE_SEMI_USER,
 			userInfo.getUsername());
+
+		// UserInfo userInfo = UserInfo.builder()
+		// 	.osAuthInfo(osAuthInfo)
+		// 	.uuid(UUID.randomUUID().toString())
+		// 	.username(registerReq.getUsername())
+		// 	.initialReviewCount(registerReq.getInitialReviewCount())
+		// 	.role(UserRole.ROLE_USER)
+		// 	.build();
+		//
+		// String accessToken = jwtUtil.generateAccessToken(userInfo.getUuid(), UserRole.ROLE_USER,
+		// 	userInfo.getUsername());
+		// String refreshToken = jwtUtil.generateRefreshToken(userInfo.getUuid(), UserRole.ROLE_USER,
+		// 	userInfo.getUsername());
 
 		userInfo.updateRefreshToken(refreshToken);
 
@@ -99,11 +99,11 @@ public class AuthService {
 			.orElseThrow(() -> new BusinessException(ResponseCode.LOGIN_FAIL));
 
 		UserRole role = user.getRole();
-		// if (validOnboardingInfo(user.getStreakInfo())) {
-		// 	role = UserRole.ROLE_USER;
-		// } else {
-		// 	role = UserRole.ROLE_SEMI_USER;
-		// }
+		if (validOnboardingInfo(user.getStreakInfo())) {
+			role = UserRole.ROLE_USER;
+		} else {
+			role = UserRole.ROLE_SEMI_USER;
+		}
 
 		TokenDto tokenDto = jwtUtil.generateTokenDtoWithRole(osIdAuthenticationToken, role);
 
