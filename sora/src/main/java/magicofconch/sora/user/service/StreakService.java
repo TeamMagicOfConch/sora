@@ -40,7 +40,7 @@ public class StreakService {
 			StreakConverter.overwrite(user.getStreakInfo(), req);
 		}
 
-		user.updateRole(UserRole.ROLE_USER);
+		user.updateRole(UserRole.ROLE_SEMI_USER);
 		userInfoRepository.save(user).getStreakInfo();
 
 		TokenDto tokenDto = jwtUtil.generateTokenDtoWithRole(user.getUuid(), user.getUsername(), user.getRole());
