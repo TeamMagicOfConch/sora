@@ -10,7 +10,6 @@ import magicOfConch.user.UserInfo;
 import magicofconch.sora.user.api.dto.req.FcmRegisterReq;
 import magicofconch.sora.user.api.dto.req.NotificationInfoReq;
 import magicofconch.sora.user.repository.OsAuthInfoRepository;
-import magicofconch.sora.user.repository.StreakInfoRepository;
 import magicofconch.sora.util.ResponseCode;
 import magicofconch.sora.util.SecurityUtil;
 import magicofconch.sora.util.exception.BusinessException;
@@ -20,7 +19,6 @@ import magicofconch.sora.util.exception.BusinessException;
 @RequiredArgsConstructor
 public class NotificationService {
 
-	private final StreakInfoRepository streakInfoRepository;
 	private final OsAuthInfoRepository osAuthInfoRepository;
 	private final SecurityUtil securityUtil;
 

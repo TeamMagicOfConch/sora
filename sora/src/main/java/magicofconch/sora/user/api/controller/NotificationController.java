@@ -37,7 +37,7 @@ public class NotificationController {
 	 * @param req : 알림 설정 값
 	 * @return : 설정 성공 여부
 	 */
-	public ResponseEntity<Response> updateNotification(NotificationInfoReq req) {
+	public ResponseEntity<Response> updateNotification(@RequestBody NotificationInfoReq req) {
 		notificationService.updateNotification(req);
 
 		return ResponseEntity.ok(Response.ok());
