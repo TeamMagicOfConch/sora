@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -24,15 +25,55 @@ public interface NotificationControllerDocs {
 		@ApiResponse(
 			responseCode = "200",
 			description = "FCM 토큰 등록 성공",
-			content = @Content(schema = @Schema(implementation = Response.class))
+			content = @Content(
+				mediaType = "application/json",
+				schema = @Schema(implementation = Response.class),
+				examples = @ExampleObject(
+					name = "성공 응답",
+					value = """
+						{
+						  "status": 200,
+						  "code": "GEN-000"
+						}
+						"""
+				)
+			)
 		),
 		@ApiResponse(
 			responseCode = "400",
-			description = "잘못된 요청 (유효하지 않은 토큰 형식 등)"
+			description = "잘못된 요청 (유효하지 않은 토큰 형식 등)",
+			content = @Content(
+				mediaType = "application/json",
+				schema = @Schema(implementation = Response.class),
+				examples = @ExampleObject(
+					name = "잘못된 요청",
+					value = """
+						{
+						  "status": 400,
+						  "code": "VAL-001",
+						  "message": "Argument not valid"
+						}
+						"""
+				)
+			)
 		),
 		@ApiResponse(
 			responseCode = "404",
-			description = "등록되지 않은 기기 ID (OS_ID_NOT_FOUND)"
+			description = "등록되지 않은 기기 ID (OS_ID_NOT_FOUND)",
+			content = @Content(
+				mediaType = "application/json",
+				schema = @Schema(implementation = Response.class),
+				examples = @ExampleObject(
+					name = "기기 ID 없음",
+					value = """
+						{
+						  "status": 404,
+						  "code": "OID-001",
+						  "message": "Os Id not found"
+						}
+						"""
+				)
+			)
 		)
 	})
 	ResponseEntity<Response> registerFcmToken(@RequestBody FcmRegisterReq req);
@@ -45,15 +86,55 @@ public interface NotificationControllerDocs {
 		@ApiResponse(
 			responseCode = "200",
 			description = "알림 설정 업데이트 성공",
-			content = @Content(schema = @Schema(implementation = Response.class))
+			content = @Content(
+				mediaType = "application/json",
+				schema = @Schema(implementation = Response.class),
+				examples = @ExampleObject(
+					name = "성공 응답",
+					value = """
+						{
+						  "status": 200,
+						  "code": "GEN-000"
+						}
+						"""
+				)
+			)
 		),
 		@ApiResponse(
 			responseCode = "400",
-			description = "잘못된 요청"
+			description = "잘못된 요청",
+			content = @Content(
+				mediaType = "application/json",
+				schema = @Schema(implementation = Response.class),
+				examples = @ExampleObject(
+					name = "잘못된 요청",
+					value = """
+						{
+						  "status": 400,
+						  "code": "VAL-001",
+						  "message": "Argument not valid"
+						}
+						"""
+				)
+			)
 		),
 		@ApiResponse(
 			responseCode = "401",
-			description = "인증되지 않은 사용자"
+			description = "인증되지 않은 사용자",
+			content = @Content(
+				mediaType = "application/json",
+				schema = @Schema(implementation = Response.class),
+				examples = @ExampleObject(
+					name = "인증 실패",
+					value = """
+						{
+						  "status": 401,
+						  "code": "SEC-001",
+						  "message": "Refresh token is expired"
+						}
+						"""
+				)
+			)
 		)
 	})
 	ResponseEntity<Response> updateNotification(@RequestBody NotificationInfoReq req);
