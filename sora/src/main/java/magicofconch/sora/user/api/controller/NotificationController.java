@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import magicofconch.sora.user.api.docs.NotificationControllerDocs;
 import magicofconch.sora.user.api.dto.req.FcmRegisterReq;
 import magicofconch.sora.user.api.dto.req.NotificationInfoReq;
 import magicofconch.sora.user.service.NotificationService;
@@ -15,32 +16,21 @@ import magicofconch.sora.util.Response;
 @RestController
 @RequestMapping("/auth/notification")
 @RequiredArgsConstructor
-public class NotificationController {
+public class NotificationController implements NotificationControllerDocs {
 
 	private final NotificationService notificationService;
 
-	/**
-	 * FCM 기기별 토큰 등록 및 알림 설정
-	 * @param req : fcm 등록 기기 정보 및 발행된 토큰
-	 * @return : 성공여부
-	 */
 	@PostMapping("/token")
+	@Override
 	public ResponseEntity<Response> registerFcmToken(@RequestBody FcmRegisterReq req) {
-
 		notificationService.registerFcm(req);
-
 		return ResponseEntity.ok(Response.ok());
 	}
 
-	/**
-	 * 사용자 알림 설정 값 반영
-	 * @param req : 알림 설정 값
-	 * @return : 설정 성공 여부
-	 */
 	@PostMapping
+	@Override
 	public ResponseEntity<Response> updateNotification(@RequestBody NotificationInfoReq req) {
 		notificationService.updateNotification(req);
-
 		return ResponseEntity.ok(Response.ok());
 	}
 }

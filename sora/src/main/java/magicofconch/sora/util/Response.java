@@ -1,5 +1,6 @@
 package magicofconch.sora.util;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+@Schema(description = "API 응답 객체")
 @Slf4j
 @Builder
 @AllArgsConstructor
@@ -17,9 +19,17 @@ import lombok.NoArgsConstructor;
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Response<T> {
+    
+    @Schema(description = "HTTP 상태 코드", example = "200")
     private Integer status;
+    
+    @Schema(description = "응답 코드", example = "SUCCESS")
     private String code;
+    
+    @Schema(description = "응답 메시지 (에러 시에만 포함)", example = "성공적으로 처리되었습니다")
     private String message;
+    
+    @Schema(description = "응답 데이터")
     private T data;
 
     public static Response<Void> ok(){
