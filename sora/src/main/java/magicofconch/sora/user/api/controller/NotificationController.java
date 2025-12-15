@@ -37,6 +37,7 @@ public class NotificationController {
 	 * @param req : 알림 설정 값
 	 * @return : 설정 성공 여부
 	 */
+	@PostMapping
 	public ResponseEntity<Response> updateNotification(@RequestBody NotificationInfoReq req) {
 		notificationService.updateNotification(req);
 
