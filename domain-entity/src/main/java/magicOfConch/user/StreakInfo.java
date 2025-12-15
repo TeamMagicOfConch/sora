@@ -52,11 +52,18 @@ public class StreakInfo {
 	@Comment("사용자 목표 정체성")
 	private String aspiration;
 
+	@Comment("사용자 streak 알림 수신 여부")
+	private Boolean isReceiveNotification = false;
+
 	@Builder
 	public StreakInfo(String reviewTime, LocalTime reviewAt, String writeLocation, String aspiration) {
 		this.reviewTime = reviewTime;
 		this.reviewAt = reviewAt;
 		this.writeLocation = writeLocation;
 		this.aspiration = aspiration;
+	}
+
+	public void receiveNotification() {
+		this.isReceiveNotification = true;
 	}
 }
