@@ -14,9 +14,8 @@ import lombok.Setter;
 public class NotificationInfoReq {
 
 	@Schema(
-		description = "Streak 알림 수신 동의 여부 (true: 수신 동의, false: 수신 거부)",
-		example = "true",
-		requiredMode = Schema.RequiredMode.REQUIRED
+		description = "Streak 알림 수신 동의 여부",
+		example = "true"
 	)
 	private Boolean streak;
 

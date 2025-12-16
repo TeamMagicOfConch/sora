@@ -41,12 +41,12 @@ public interface NotificationControllerDocs {
 		),
 		@ApiResponse(
 			responseCode = "400",
-			description = "잘못된 요청 (유효하지 않은 토큰 형식 등)",
+			description = "잘못된 요청",
 			content = @Content(
 				mediaType = "application/json",
 				schema = @Schema(implementation = Response.class),
 				examples = @ExampleObject(
-					name = "잘못된 요청",
+					name = "유효성 검증 실패",
 					value = """
 						{
 						  "status": 400,
@@ -59,7 +59,7 @@ public interface NotificationControllerDocs {
 		),
 		@ApiResponse(
 			responseCode = "404",
-			description = "등록되지 않은 기기 ID (OS_ID_NOT_FOUND)",
+			description = "등록되지 않은 기기 ID",
 			content = @Content(
 				mediaType = "application/json",
 				schema = @Schema(implementation = Response.class),
@@ -107,7 +107,7 @@ public interface NotificationControllerDocs {
 				mediaType = "application/json",
 				schema = @Schema(implementation = Response.class),
 				examples = @ExampleObject(
-					name = "잘못된 요청",
+					name = "유효성 검증 실패",
 					value = """
 						{
 						  "status": 400,
