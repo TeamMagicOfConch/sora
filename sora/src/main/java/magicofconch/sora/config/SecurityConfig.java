@@ -54,7 +54,7 @@ public class SecurityConfig {
 				"/v3/api-docs/**",
 				"/swagger-resources/**",
 				"/webjars/**").permitAll()
-			.requestMatchers("/auth/semi/**").hasAnyRole("SEMI_USER", "USER")
+			.requestMatchers("/auth/**").hasAnyRole("SEMI_USER", "USER")
 			.requestMatchers("/auth/user/**").hasRole("USER")
 			.anyRequest().authenticated());
 

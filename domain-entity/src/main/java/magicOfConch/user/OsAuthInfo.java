@@ -39,9 +39,15 @@ public class OsAuthInfo extends BaseEntity {
 	private String osId;
 	private String osType;
 
+	private String fcmToken;
+
 	@Builder
-	public OsAuthInfo(String osId, String osType){
+	public OsAuthInfo(String osId, String osType) {
 		this.osId = osId;
 		this.osType = osType;
+	}
+
+	public void updateToken(String fcmToken) {
+		this.fcmToken = fcmToken;
 	}
 }

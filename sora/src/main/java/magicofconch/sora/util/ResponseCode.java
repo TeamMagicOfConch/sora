@@ -31,6 +31,9 @@ public enum ResponseCode {
 	//Streak
 	STREAK_NOT_REGISTERED(400, "STR-004", HttpStatus.BAD_REQUEST, "Stream is already registered"),
 
+	//OS ID
+	OS_ID_NOT_FOUND(400, "OID-001", HttpStatus.NOT_FOUND, "Os Id not found"),
+
 	//Validation
 	ARGUMENT_NOT_VALID(400, "VAL-001", HttpStatus.BAD_REQUEST, "Argument not valid");
 

@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Response<T> {
+    
     private Integer status;
     private String code;
     private String message;
