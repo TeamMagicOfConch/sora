@@ -41,6 +41,13 @@ dependencies {
     implementation platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT")
     implementation 'org.springframework.ai:spring-ai-starter-model-openai'
 
+    // Jackson Java 8 Date/Time Support
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+    // Netty DNS resolver for MacOS (optional, removes warning)
+    if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+        implementation 'io.netty:netty-resolver-dns-native-macos:4.1.100.Final:osx-aarch_64'
+    }
 
     // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
