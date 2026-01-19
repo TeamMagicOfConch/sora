@@ -12,6 +12,11 @@ spring:
         options:
           model: ${OPEN_AI_MODEL}
         project-id: ${OPEN_AI_PROJECT}
+
+logging:
+  level:
+    magicofconch.sorawebflux.review.service.SoraService: DEBUG
+
 jwt:
   secret: ${JWT_SECRET}
   expiration:
@@ -21,3 +26,8 @@ jwt:
 sora:
   srv:
     url: ${SORA_SRV_URL}
+
+dify:
+  api-key:
+    F: ${DIFY_F_API_KEY}
+    T: ${DIFY_T_API_KEY}
