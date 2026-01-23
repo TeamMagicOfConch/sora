@@ -48,12 +48,13 @@ public class SecurityConfig {
 
 		// 경로별 인가
 		http.authorizeHttpRequests((auth) -> auth
-			.requestMatchers("/test/api/**", "/user/**", "/swagger-ui.html",
+			.requestMatchers("/test/**", "/user/**", "/swagger-ui.html",
 				"/swagger-ui/**",
 				"/api-docs/**",
 				"/v3/api-docs/**",
 				"/swagger-resources/**",
-				"/webjars/**").permitAll()
+				"/webjars/**",
+				"/actuator/**").permitAll()  // Actuator 엔드포인트 허용 추가
 			.requestMatchers("/auth/**").hasAnyRole("SEMI_USER", "USER")
 			.requestMatchers("/auth/user/**").hasRole("USER")
 			.anyRequest().authenticated());
