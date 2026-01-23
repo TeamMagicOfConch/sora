@@ -65,6 +65,10 @@ dependencies {
     //FCM Admin SDK
     implementation 'com.google.firebase:firebase-admin:9.2.0'
 
+    // Prometheus Metrics
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
