@@ -31,3 +31,19 @@ dify:
   api-key:
     F: ${DIFY_F_API_KEY}
     T: ${DIFY_T_API_KEY}
+
+### Actuator & Prometheus
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+      base-path: /actuator
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name:sora-webflux}
