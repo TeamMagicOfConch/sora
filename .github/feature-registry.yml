@@ -1,6 +1,18 @@
 # .github/pr-review/feature-registry.yml
 
 features:
+
+  - name: MONITORING
+    description: "Prometheus 기반 모니터링 "
+    paths:
+      - "sora/src/build.gradle"
+      - "sora/src/main/resources/application.yml"
+      - "sora-webflux/src/build.gradle"
+      - "sora-webflux/src/main/resources/application.yml"
+    reviewFocus:
+      - "webflux, sora 모듈에만 설치"
+
+
   # ============================================
   # 1. 인증/인가 관련 Features
   # ============================================
