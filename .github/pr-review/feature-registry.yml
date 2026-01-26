@@ -2,7 +2,7 @@
 
 features:
 
-  - name: MONITORING
+  MONITORING:
     description: "Prometheus 기반 모니터링 "
     paths:
       - "sora/src/main/resources/**"
@@ -15,12 +15,7 @@ features:
     reviewFocus:
       - "webflux, sora 모듈에만 설치"
 
-
-  # ============================================
-  # 1. 인증/인가 관련 Features
-  # ============================================
-
-  - name: USER_AUTHENTICATION
+  USER_AUTHENTICATION:
     description: "OS_ID 기반 사용자 인증 시스템. 회원가입, 로그인, JWT 토큰 발급/갱신"
     paths:
       - "sora/src/main/java/magicofconch/sora/security/**"
@@ -38,11 +33,7 @@ features:
       - "비밀번호/토큰 암호화: 평문 저장 금지"
       - "인증 실패 처리: Rate limiting, 계정 잠금"
 
-  # ============================================
-  # 2. 리뷰 생성 및 저장 Features
-  # ============================================
-
-  - name: AI_REVIEW_GENERATION
+  AI_REVIEW_GENERATION:
     description: "OpenAI 기반 AI 회고 리뷰 생성. MBTI T/F 성향별 프롬프트 분기"
     paths:
       - "sora/src/main/java/magicofconch/sora/review/service/SoraService.java"
@@ -58,7 +49,7 @@ features:
       - "토큰 사용량 최적화: 프롬프트 길이 제한"
       - "AI 응답 검증: 부적절한 내용 필터링"
 
-  - name: REVIEW_STREAMING
+  REVIEW_STREAMING:
     description: "WebFlux 기반 AI 리뷰 실시간 스트리밍 (SSE). Non-blocking 토큰 단위 전송"
     paths:
       - "sora-webflux/src/main/java/magicofconch/sorawebflux/review/controller/SoraController.java"
@@ -76,7 +67,7 @@ features:
       - "에러 스트리밍: 스트리밍 중 에러 발생 시 클라이언트 알림"
       - "동시 접속: Non-blocking I/O 활용, 리소스 관리"
 
-  - name: REVIEW_PERSISTENCE
+  REVIEW_PERSISTENCE:
     description: "리뷰 데이터 저장 및 조회. AES 암호화 적용"
     paths:
       - "sora/src/main/java/magicofconch/sora/review/repository/**"
@@ -93,11 +84,7 @@ features:
       - "암호키 관리: 키 로테이션, 환경변수 관리"
       - "복호화 성능: 대량 조회 시 성능"
 
-  # ============================================
-  # 3. 리뷰 조회 Features
-  # ============================================
-
-  - name: REVIEW_LIST_VIEW
+  REVIEW_LIST_VIEW:
     description: "사용자 회고 작성 내역 리스트 형태 조회. 페이징, 필터링"
     paths:
       - "sora/src/main/java/magicofconch/sora/review/api/controller/**"
@@ -112,7 +99,7 @@ features:
       - "정렬/필터링: 날짜, 성향(T/F) 기준 정렬"
       - "API 응답 최적화: DTO 변환, 불필요한 데이터 제외"
 
-  - name: REVIEW_CALENDAR_VIEW
+  REVIEW_CALENDAR_VIEW:
     description: "사용자 회고 작성 내역 캘린더 형태 조회. 월별/일별 집계"
     paths:
       - "sora/src/main/java/magicofconch/sora/review/api/controller/**"
@@ -122,15 +109,11 @@ features:
       - "sora/src/main/java/magicofconch/sora/review/service/ReviewService.java"
     reviewFocus:
       - "월별 집계 쿼리: GROUP BY 최적화, 인덱스 활용"
-      - "날짜 처리: 타임존 일관성, DST(Daylight Saving Time) 처리"
+      - "날짜 처리: 타임존 일관성, DST 처리"
       - "권한 검증: 본인 데이터만 조회"
-      - "빈 날짜 처리: 리뷰 없는 날짜도 응답에 포함"
+      - "빈 날짜 처리: 리뷰 없는 날짜 포함"
 
-  # ============================================
-  # 4. 사용자 관리 Features
-  # ============================================
-
-  - name: USER_PROFILE
+  USER_PROFILE:
     description: "사용자 프로필 관리, 스트릭 정보 조회"
     paths:
       - "sora/src/main/java/magicofconch/sora/user/service/**"
@@ -145,7 +128,7 @@ features:
       - "프로필 업데이트: 동시성 제어"
       - "알림 설정: 푸시 토큰 관리"
 
-  - name: USER_NOTIFICATION
+  USER_NOTIFICATION:
     description: "사용자 알림 발송. Firebase Cloud Messaging 연동"
     paths:
       - "sora/src/main/java/magicofconch/sora/user/service/NotificationService.java"
@@ -158,11 +141,7 @@ features:
       - "알림 우선순위: 긴급 알림 vs 일반 알림"
       - "알림 수신 거부 처리"
 
-  # ============================================
-  # 5. 공통 인프라 Features
-  # ============================================
-
-  - name: SECURITY_INFRASTRUCTURE
+  SECURITY_INFRASTRUCTURE:
     description: "Spring Security 설정, JWT 필터, 암호화 유틸"
     paths:
       - "sora/src/main/java/magicofconch/sora/config/SecurityConfig.java"
@@ -176,29 +155,9 @@ features:
       - "CORS 설정: 허용 도메인 제한"
       - "CSRF 보호: SameSite 쿠키 설정"
       - "인증 예외 처리: 401/403 명확한 구분"
-      - "보안 헤더: X-Frame-Options, CSP 등"
+      - "보안 헤더 설정"
 
-  - name: EXCEPTION_HANDLING
+  EXCEPTION_HANDLING:
     description: "전역 예외 처리, 커스텀 예외, 에러 응답 표준화"
     paths:
-      - "sora/src/main/java/magicofconch/sora/util/exception/**"
-      - "sora/src/main/java/magicofconch/sora/util/Response.java"
-      - "sora/src/main/java/magicofconch/sora/util/ResponseCode.java"
-    coreFiles:
-      - "sora/src/main/java/magicofconch/sora/util/exception/GlobalExceptionHandler.java"
-    reviewFocus:
-      - "민감정보 노출: 스택 트레이스, DB 에러 메시지 숨김"
-      - "에러 로깅: 상세 로그 vs 클라이언트 응답 분리"
-      - "HTTP 상태 코드: 적절한 상태 코드 사용"
-      - "에러 메시지: 사용자 친화적 메시지"
-
-  - name: DOMAIN_ENTITY
-    description: "공유 도메인 엔티티 및 Enum 정의"
-    paths:
-      - "domain-entity/src/main/java/magicOfConch/**"
-    coreFiles: [ ]
-    reviewFocus:
-      - "엔티티 불변성: 필드 final, 빌더 패턴"
-      - "연관관계 매핑: 양방향 관계 일관성"
-      - "엔티티 검증: @Valid, 커스텀 Validator"
-      - "Enum 확장성: 새 값 추가 시 하위 호환성"
+      - "sora/src/main/java/magicofconch/sora/util/exception/
