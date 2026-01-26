@@ -5,6 +5,9 @@ features:
   - name: MONITORING
     description: "Prometheus 기반 모니터링 "
     paths:
+      - "sora/src/main/resources/**"
+      - "sora-webflux/src/main/resources/**"
+    coreFiles:
       - "sora/src/build.gradle"
       - "sora/src/main/resources/application.yml"
       - "sora-webflux/src/build.gradle"
@@ -193,6 +196,7 @@ features:
     description: "공유 도메인 엔티티 및 Enum 정의"
     paths:
       - "domain-entity/src/main/java/magicOfConch/**"
+    coreFiles: [ ]
     reviewFocus:
       - "엔티티 불변성: 필드 final, 빌더 패턴"
       - "연관관계 매핑: 양방향 관계 일관성"
