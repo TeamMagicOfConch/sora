@@ -160,4 +160,4 @@ features:
   EXCEPTION_HANDLING:
     description: "전역 예외 처리, 커스텀 예외, 에러 응답 표준화"
     paths:
-      - "sora/src/main/java/magicofconch/sora/util/exception/
+      - "sora/src/main/java/magicofconch/sora/util/exception/"
