@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import magicOfConch.review.Review;
+import magicOfConch.user.StreakInfo;
 import magicOfConch.user.UserInfo;
 import magicofconch.sora.review.api.dto.req.SaveReq;
 import magicofconch.sora.review.api.dto.req.SubmitReq;
@@ -79,6 +80,19 @@ public class ReviewService {
 		}
 
 		UserInfo userInfo = securityUtil.getCurrentUsersEntity();
+		LocalDate yesterday = LocalDate.now().minusDays(1);
+		LocalDate today = LocalDate.now();
+		StreakInfo streakInfo = userInfo.getStreakInfo();
+
+		//연속 작성 확인
+		if (streakInfo.getLastWriteDate() != null && streakInfo.getLastWriteDate().isEqual(yesterday)) {
+			streakInfo.setLastWriteDate(today);
+			streakInfo.addStreakCount();
+		} else {    //연속이 아니라면 1로 초기화
+			streakInfo.setLastWriteDate(today);
+			streakInfo.clearStreakCount();
+		}
+
 		Review review = Review.builder()
 			.userInfo(userInfo)
 			.body(encryptBody)
