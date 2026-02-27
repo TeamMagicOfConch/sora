@@ -44,10 +44,7 @@ features:
       - "sora-webflux/src/main/java/magicofconch/sorawebflux/review/service/SoraService.java"
     reviewFocus:
       - "OpenAI API 호출: 에러 핸들링, 타임아웃 설정, 재시도 로직"
-      - "프롬프트 엔지니어링: T/F 성향별 프롬프트 차별화"
-      - "시스템 프롬프트: 사용자 이름 포함, Sora 캐릭터 일관성"
-      - "토큰 사용량 최적화: 프롬프트 길이 제한"
-      - "AI 응답 검증: 부적절한 내용 필터링"
+      - "일기 연속 작성 여부 검증 및 DB 반영"
 
   REVIEW_STREAMING:
     description: "WebFlux 기반 AI 리뷰 실시간 스트리밍 (SSE). Non-blocking 토큰 단위 전송"
