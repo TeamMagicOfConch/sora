@@ -1,14 +1,23 @@
 package magicofconch.soraadmin.batch.streak.job;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Map;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemStreamException;
+import org.springframework.batch.item.ItemStreamReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaCursorItemReader;
 import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -16,6 +25,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import magicOfConch.user.UserInfo;
+import magicofconch.soraadmin.batch.streak.dto.FcmRequest;
+import magicofconch.soraadmin.batch.streak.dto.UserStreakItem;
+import magicofconch.soraadmin.batch.streak.listener.StreakJobListener;
 
 @Configuration
 @RequiredArgsConstructor
@@ -23,19 +35,21 @@ public class StreakJob {
 
 	private final JobRepository jobRepository;
 	private final PlatformTransactionManager transactionManager;
+	private final StreakJobListener streakJobListener;
 
 	@Bean
 	public Job streakAlertJob(JobRepository jobRepository, Step streakAlertStep) {
 		return new JobBuilder("streakAlertJob", jobRepository)
+			.listener(streakJobListener)
 			.start(streakAlertStep)
 			.build();
 	}
 
 	@Bean
-	public Step streakAlertStep(EntityManagerFactory entityManagerFactory, JpaCursorItemReader<UserInfo> streakReader,
-		ItemProcessor<UserInfo, Void> streakProcessor, ItemWriter<Void> streakWriter) {
+	public Step streakAlertStep(EntityManagerFactory entityManagerFactory, ItemStreamReader<UserStreakItem> streakReader,
+		ItemProcessor<UserStreakItem, FcmRequest> streakProcessor, ItemWriter<FcmRequest> streakWriter) {
 		return new StepBuilder("streakAlertStep", jobRepository)
-			.<UserInfo, Void>chunk(50, transactionManager)
+			.<UserStreakItem, FcmRequest>chunk(50, transactionManager)
 			.reader(streakReader)
 			.processor(streakProcessor)
 			.writer(streakWriter)
@@ -43,22 +57,46 @@ public class StreakJob {
 	}
 
 	@Bean
-	public ItemWriter<Void> streakWriter() {
-		return items -> {
-			// 아무것도 하지 않음
+	@StepScope
+	public ItemStreamReader<UserStreakItem> streakReader(EntityManagerFactory entityManagerFactory,
+		@Value("#{jobExecutionContext['alertTime']}") LocalDateTime alertTime) {
+		JpaCursorItemReader<Object[]> delegate = new JpaCursorItemReaderBuilder<Object[]>()
+			.name("streakUserInfoReader").entityManagerFactory(entityManagerFactory)
+			.queryString("SELECT u, (SELECT MIN(r.reviewDate) FROM Review r WHERE r.userInfo = u) "
+				+ "FROM UserInfo u "
+				+ "LEFT JOIN FETCH u.osAuthInfo oi "
+				+ "LEFT JOIN FETCH u.streakInfo si "
+				+ "WHERE FUNCTION('HOUR', si.reviewAt) = :hour "
+				+ "AND FUNCTION('MINUTE', si.reviewAt) = :minute "
+				+ "ORDER BY u.id")
+			.parameterValues(Map.of(
+				"hour", alertTime.getHour(),
+				"minute", alertTime.getMinute()
+			))
+			.build();
+
+		return new ItemStreamReader<>() {
+			@Override
+			public void open(ExecutionContext executionContext) throws ItemStreamException {
+				delegate.open(executionContext);
+			}
+
+			@Override
+			public void update(ExecutionContext executionContext) throws ItemStreamException {
+				delegate.update(executionContext);
+			}
+
+			@Override
+			public void close() throws ItemStreamException {
+				delegate.close();
+			}
+
+			@Override
+			public UserStreakItem read() throws Exception {
+				Object[] item = delegate.read();
+				if (item == null) return null;
+				return new UserStreakItem((UserInfo) item[0], (LocalDate) item[1]);
+			}
 		};
 	}
-
-	@Bean
-	public JpaCursorItemReader<UserInfo> streakReader(EntityManagerFactory entityManagerFactory) {
-		return new JpaCursorItemReaderBuilder<UserInfo>()
-			.name("streakUserInfoReader")
-			.entityManagerFactory(entityManagerFactory)
-			.queryString("SELECT u FROM UserInfo u "
-				+ "LEFT JOIN FETCH u.osAuthInfo "
-				+ "LEFT JOIN FETCH u.streakInfo "
-				+ "ORDER BY u.id")
-			.build();
-	}
-
 }
