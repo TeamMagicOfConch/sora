@@ -154,6 +154,28 @@ features:
       - "인증 예외 처리: 401/403 명확한 구분"
       - "보안 헤더 설정"
 
+  STREAK_BATCH_NOTIFICATION:
+    description: "Spring Batch 기반 회고 연속 작성 스트릭 알림 배치. 설정된 알람 시간에 FCM 푸시 발송"
+    paths:
+      - "soraAdmin/src/main/java/magicofconch/soraadmin/batch/streak/**"
+      - "soraAdmin/src/main/java/magicofconch/soraadmin/repository/ReviewRepository.java"
+      - "domain-entity/src/main/java/magicOfConch/user/StreakInfo.java"
+      - "domain-entity/src/main/java/magicOfConch/enums/OsType.java"
+    coreFiles:
+      - "soraAdmin/src/main/java/magicofconch/soraadmin/batch/streak/job/StreakJob.java"
+      - "soraAdmin/src/main/java/magicofconch/soraadmin/batch/streak/processor/StreakProcessor.java"
+      - "soraAdmin/src/main/java/magicofconch/soraadmin/batch/streak/writer/StreakWriter.java"
+      - "soraAdmin/src/main/java/magicofconch/soraadmin/batch/streak/listener/StreakJobListener.java"
+      - "soraAdmin/src/main/java/magicofconch/soraadmin/batch/streak/dto/UserStreakItem.java"
+    reviewFocus:
+      - "Reader 쿼리: alertTime hour/minute 필터 정확성, JPQL 서브쿼리로 첫 회고 날짜(MIN reviewDate) 조회"
+      - "ItemStreamReader 위임: open/update/close 가 delegate에 올바르게 위임되는지"
+      - "Processor 메시지 분기: 회고 0건 / 스트릭 0 / 스트릭 1~3 / 스트릭 4+ 각 케이스 정확성"
+      - "FCM 발송: OS 타입(IOS/ANDROID/WINDOW)별 분기 처리, 토큰 누락 시 처리"
+      - "수신 동의 필터: isReceiveNotification false 유저 제외"
+      - "MultipleBagFetchException 방지: reviews 컬렉션은 JOIN FETCH 대신 서브쿼리 사용"
+      - "chunk 단위 트랜잭션: 50건 단위 처리, 부분 실패 시 롤백 범위"
+
   EXCEPTION_HANDLING:
     description: "전역 예외 처리, 커스텀 예외, 에러 응답 표준화"
     paths:
