@@ -20,13 +20,13 @@ public class StreakWriter implements ItemWriter<FcmRequest> {
 		for (FcmRequest request : chunk) {
 			switch (request.osType()) {
 				case IOS:
-					fcmUtil.sendIos(request);
+					// fcmUtil.sendIos(request);
 					break;
 				case ANDROID:
-					fcmUtil.sendAndroid(request);
+					// fcmUtil.sendAndroid(request);
 					break;
 				case WINDOW:
-					fcmUtil.sendWeb(request);
+					// fcmUtil.sendWeb(request);
 					break;
 			}
 		}
