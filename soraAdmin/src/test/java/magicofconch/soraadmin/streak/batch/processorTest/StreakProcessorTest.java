@@ -1,7 +1,6 @@
 package magicofconch.soraadmin.streak.batch.processorTest;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,7 +22,6 @@ import magicOfConch.user.UserInfo;
 import magicofconch.soraadmin.batch.streak.dto.FcmRequest;
 import magicofconch.soraadmin.batch.streak.dto.UserStreakItem;
 import magicofconch.soraadmin.batch.streak.processor.StreakProcessor;
-import magicofconch.soraadmin.repository.ReviewRepository;
 import magicofconch.soraadmin.util.FcmUtil;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,8 +30,6 @@ class StreakProcessorTest {
 	private final LocalDateTime alertTime = LocalDateTime.of(2024, 3, 10, 14, 30);
 	@Mock
 	private FcmUtil fcmUtil;
-	@Mock
-	private ReviewRepository reviewRepository;
 	@InjectMocks
 	private StreakProcessor processor;
 
@@ -79,7 +75,7 @@ class StreakProcessorTest {
 	void streakInfo가_null이면_null을_반환한다() throws Exception {
 		UserInfo userInfo = userInfo(streakInfo(LocalTime.of(14, 30), true, 1));
 		userInfo.updateStreakInfo(null);
-		UserStreakItem item = new UserStreakItem(userInfo, null);
+		UserStreakItem item = new UserStreakItem(userInfo, null, 0);
 
 		assertThat(processor.process(item)).isNull();
 	}
@@ -87,7 +83,7 @@ class StreakProcessorTest {
 	@Test
 	void 수신동의_안한_유저는_null을_반환한다() throws Exception {
 		UserInfo userInfo = userInfo(streakInfo(LocalTime.of(14, 30), false, 1));
-		UserStreakItem item = new UserStreakItem(userInfo, null);
+		UserStreakItem item = new UserStreakItem(userInfo, null, 0);
 
 		assertThat(processor.process(item)).isNull();
 	}
@@ -95,7 +91,7 @@ class StreakProcessorTest {
 	@Test
 	void 알람시간이_다른_유저는_null을_반환한다() throws Exception {
 		UserInfo userInfo = userInfo(streakInfo(LocalTime.of(10, 0), true, 1));
-		UserStreakItem item = new UserStreakItem(userInfo, null);
+		UserStreakItem item = new UserStreakItem(userInfo, null, 0);
 
 		assertThat(processor.process(item)).isNull();
 	}
@@ -104,7 +100,7 @@ class StreakProcessorTest {
 	void OsAuthInfo가_없으면_null을_반환한다() throws Exception {
 		UserInfo userInfo = userInfo(streakInfo(LocalTime.of(14, 30), true, 1));
 		ReflectionTestUtils.setField(userInfo, "osAuthInfo", new ArrayList<>());
-		UserStreakItem item = new UserStreakItem(userInfo, null);
+		UserStreakItem item = new UserStreakItem(userInfo, null, 0);
 
 		assertThat(processor.process(item)).isNull();
 	}
@@ -114,8 +110,7 @@ class StreakProcessorTest {
 	@Test
 	void 회고를_한번도_안쓴_유저는_첫_회고_유도_메시지를_반환한다() throws Exception {
 		UserInfo userInfo = userInfo(streakInfo(LocalTime.of(14, 30), true, 0));
-		UserStreakItem item = new UserStreakItem(userInfo, null);
-		when(reviewRepository.countByUserInfo(userInfo)).thenReturn(0);
+		UserStreakItem item = new UserStreakItem(userInfo, null, 0);
 
 		FcmRequest result = processor.process(item);
 
@@ -127,8 +122,7 @@ class StreakProcessorTest {
 	void 회고는_있지만_스트릭이_0이면_첫_회고_날짜_메시지를_반환한다() throws Exception {
 		UserInfo userInfo = userInfo(streakInfo(LocalTime.of(14, 30), true, 0));
 		LocalDate firstReviewDate = LocalDate.of(2024, 3, 5);
-		UserStreakItem item = new UserStreakItem(userInfo, firstReviewDate);
-		when(reviewRepository.countByUserInfo(userInfo)).thenReturn(3);
+		UserStreakItem item = new UserStreakItem(userInfo, firstReviewDate, 3);
 
 		FcmRequest result = processor.process(item);
 
@@ -139,8 +133,7 @@ class StreakProcessorTest {
 	@Test
 	void 스트릭이_1에서_3이면_열망_메시지를_반환한다() throws Exception {
 		UserInfo userInfo = userInfo(streakInfo(LocalTime.of(14, 30), true, 2));
-		UserStreakItem item = new UserStreakItem(userInfo, LocalDate.of(2024, 3, 1));
-		when(reviewRepository.countByUserInfo(userInfo)).thenReturn(5);
+		UserStreakItem item = new UserStreakItem(userInfo, LocalDate.of(2024, 3, 1), 5);
 
 		FcmRequest result = processor.process(item);
 
@@ -151,8 +144,7 @@ class StreakProcessorTest {
 	@Test
 	void 스트릭이_4이상이면_연속일수_메시지를_반환한다() throws Exception {
 		UserInfo userInfo = userInfo(streakInfo(LocalTime.of(14, 30), true, 5));
-		UserStreakItem item = new UserStreakItem(userInfo, LocalDate.of(2024, 3, 1));
-		when(reviewRepository.countByUserInfo(userInfo)).thenReturn(10);
+		UserStreakItem item = new UserStreakItem(userInfo, LocalDate.of(2024, 3, 1), 10);
 
 		FcmRequest result = processor.process(item);
 
