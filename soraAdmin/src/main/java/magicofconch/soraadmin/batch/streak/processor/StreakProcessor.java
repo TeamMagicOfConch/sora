@@ -15,7 +15,6 @@ import magicOfConch.user.StreakInfo;
 import magicOfConch.user.UserInfo;
 import magicofconch.soraadmin.batch.streak.dto.FcmRequest;
 import magicofconch.soraadmin.batch.streak.dto.UserStreakItem;
-import magicofconch.soraadmin.repository.ReviewRepository;
 import magicofconch.soraadmin.util.FcmUtil;
 
 @Slf4j
@@ -29,8 +28,6 @@ public class StreakProcessor implements ItemProcessor<UserStreakItem, FcmRequest
 	private final String streakZeroReviewNonZero = "%d월 %d일 첫 회고를 작성했어요. 오늘도 한 줄 적어볼까요?";
 	private final String streakOneToThree = "이제 곧 회고 시간이에요. %s에서 %s가 되어볼까요?";
 	private final String streakMoreThree = "오늘 한문장 쓰면 연속 %d일차, %s에 한걸음 더 가까워져요";
-	private final ReviewRepository reviewRepository;
-
 	@Value("#{jobExecutionContext['alertTime']}")
 	private LocalDateTime alertTime;
 
@@ -38,8 +35,9 @@ public class StreakProcessor implements ItemProcessor<UserStreakItem, FcmRequest
 	public FcmRequest process(UserStreakItem item) throws Exception {
 		UserInfo userInfo = item.userInfo();
 		LocalDate firstReviewDate = item.firstReviewDate();
+		long reviewCount = item.reviewCount();
 
-		log.info("Processing user info {}", userInfo.getId());
+		// log.info("Processing user info {}", userInfo.getId());
 
 		StreakInfo streakInfo = userInfo.getStreakInfo();
 		// 아직 StreakInfo가 없는 기존 버전 user 대비
@@ -61,15 +59,14 @@ public class StreakProcessor implements ItemProcessor<UserStreakItem, FcmRequest
 			return null;
 		}
 
-		log.info("user reviewAt = hh:mm = {}:{} || current={}:{}", hour, minute, alertTime.getHour(),
-			alertTime.getMinute());
+		// log.info("user reviewAt = hh:mm = {}:{} || current={}:{}", hour, minute, alertTime.getHour(),
+		// 	alertTime.getMinute());
 
 		if (userInfo.getOsAuthInfo().isEmpty()) {
 			return null;
 		}
 
-		// 3번이상 작성한 유저
-		int count = reviewRepository.countByUserInfo(userInfo);
+		long count = reviewCount;
 
 		String aspiration = streakInfo.getAspiration();
 		String writeLocation = streakInfo.getWriteLocation();
@@ -81,7 +78,8 @@ public class StreakProcessor implements ItemProcessor<UserStreakItem, FcmRequest
 			body = zeroReview;
 		} else {            // 회고를 1번이상 쓴 경우
 			if (userInfo.getStreakInfo().getReviewStreakCount() == 0) {
-				body = String.format(streakZeroReviewNonZero, firstReviewDate.getMonthValue(), firstReviewDate.getDayOfMonth());
+				body = String.format(streakZeroReviewNonZero, firstReviewDate.getMonthValue(),
+					firstReviewDate.getDayOfMonth());
 			} else if (streakInfo.getReviewStreakCount() <= 3) {
 				body = String.format(streakOneToThree, aspiration, writeLocation);
 			} else {

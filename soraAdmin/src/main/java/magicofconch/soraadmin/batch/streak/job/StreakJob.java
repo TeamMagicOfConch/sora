@@ -27,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import magicOfConch.user.UserInfo;
 import magicofconch.soraadmin.batch.streak.dto.FcmRequest;
 import magicofconch.soraadmin.batch.streak.dto.UserStreakItem;
+import magicofconch.soraadmin.batch.streak.listener.ChunkTimingListener;
 import magicofconch.soraadmin.batch.streak.listener.StreakJobListener;
 
 @Configuration
@@ -36,6 +37,7 @@ public class StreakJob {
 	private final JobRepository jobRepository;
 	private final PlatformTransactionManager transactionManager;
 	private final StreakJobListener streakJobListener;
+	private final ChunkTimingListener chunkTimingListener;
 
 	@Bean
 	public Job streakAlertJob(JobRepository jobRepository, Step streakAlertStep) {
@@ -46,13 +48,15 @@ public class StreakJob {
 	}
 
 	@Bean
-	public Step streakAlertStep(EntityManagerFactory entityManagerFactory, ItemStreamReader<UserStreakItem> streakReader,
+	public Step streakAlertStep(EntityManagerFactory entityManagerFactory,
+		ItemStreamReader<UserStreakItem> streakReader,
 		ItemProcessor<UserStreakItem, FcmRequest> streakProcessor, ItemWriter<FcmRequest> streakWriter) {
 		return new StepBuilder("streakAlertStep", jobRepository)
 			.<UserStreakItem, FcmRequest>chunk(50, transactionManager)
 			.reader(streakReader)
 			.processor(streakProcessor)
 			.writer(streakWriter)
+			.listener(chunkTimingListener)
 			.build();
 	}
 
@@ -60,20 +64,30 @@ public class StreakJob {
 	@StepScope
 	public ItemStreamReader<UserStreakItem> streakReader(EntityManagerFactory entityManagerFactory,
 		@Value("#{jobExecutionContext['alertTime']}") LocalDateTime alertTime) {
+
 		JpaCursorItemReader<Object[]> delegate = new JpaCursorItemReaderBuilder<Object[]>()
-			.name("streakUserInfoReader").entityManagerFactory(entityManagerFactory)
-			.queryString("SELECT u, (SELECT MIN(r.reviewDate) FROM Review r WHERE r.userInfo = u) "
+			.name("streakUserInfoReader")
+			.entityManagerFactory(entityManagerFactory)
+			.queryString("SELECT u, "
+				+ "(SELECT MIN(r.reviewDate) FROM Review r WHERE r.userInfo = u), "
+				+ "(SELECT COUNT(r) FROM Review r WHERE r.userInfo = u) "
 				+ "FROM UserInfo u "
 				+ "LEFT JOIN FETCH u.osAuthInfo oi "
 				+ "LEFT JOIN FETCH u.streakInfo si "
-				+ "WHERE FUNCTION('HOUR', si.reviewAt) = :hour "
-				+ "AND FUNCTION('MINUTE', si.reviewAt) = :minute "
+				+ "WHERE si.reviewAt >= :start "
+				+ "AND si.reviewAt < :end "
 				+ "ORDER BY u.id")
 			.parameterValues(Map.of(
-				"hour", alertTime.getHour(),
-				"minute", alertTime.getMinute()
+				"start", alertTime.toLocalTime().withSecond(0).withNano(0),
+				"end", alertTime.toLocalTime().withSecond(0).withNano(0).plusMinutes(1)
 			))
 			.build();
+
+		try {
+			delegate.afterPropertiesSet();
+		} catch (Exception e) {
+			throw new ItemStreamException("Failed to initialize delegate reader", e);
+		}
 
 		return new ItemStreamReader<>() {
 			@Override
@@ -94,8 +108,9 @@ public class StreakJob {
 			@Override
 			public UserStreakItem read() throws Exception {
 				Object[] item = delegate.read();
-				if (item == null) return null;
-				return new UserStreakItem((UserInfo) item[0], (LocalDate) item[1]);
+				if (item == null)
+					return null;
+				return new UserStreakItem((UserInfo)item[0], (LocalDate)item[1], (Long)item[2]);
 			}
 		};
 	}

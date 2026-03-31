@@ -4,5 +4,5 @@ import java.time.LocalDate;
 
 import magicOfConch.user.UserInfo;
 
-public record UserStreakItem(UserInfo userInfo, LocalDate firstReviewDate) {
+public record UserStreakItem(UserInfo userInfo, LocalDate firstReviewDate, long reviewCount) {
 }
