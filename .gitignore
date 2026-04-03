@@ -8,6 +8,9 @@ build/
 **TestController**
 **TestService**
 
+### dev
+.omc/**
+.claude/**
 ### note
 last_work**
 **ai-docs**
