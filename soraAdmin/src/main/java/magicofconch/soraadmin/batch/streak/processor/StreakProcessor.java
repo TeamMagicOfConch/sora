@@ -14,7 +14,7 @@ import magicOfConch.enums.OsType;
 import magicOfConch.user.StreakInfo;
 import magicOfConch.user.UserInfo;
 import magicOfConch.dto.FcmRequest;
-import magicofconch.soraadmin.batch.streak.dto.UserStreakItem;
+import magicOfConch.dto.UserStreakItem;
 import magicofconch.soraadmin.util.FcmUtil;
 
 @Slf4j
