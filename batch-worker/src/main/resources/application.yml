@@ -3,7 +3,27 @@ spring:
     name: batch-worker
 
   rabbitmq:
-    host: ${RABBITMQ_HOST:localhost}
-    port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:sora}
-    password: ${RABBITMQ_PASSWORD:sora1234}
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+    listener:
+      simple:
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 1000
+          multiplier: 2.0
+        default-requeue-rejected: false
+
+rabbitmq:
+  notification:
+    exchange: ${RABBITMQ_NOTIFICATION_EXCHANGE}
+    queue: ${RABBITMQ_NOTIFICATION_QUEUE}
+    dlq: ${RABBITMQ_NOTIFICATION_DLQ}
+    routing-key: ${RABBITMQ_NOTIFICATION_ROUTING_KEY}
+    dlq-routing-key: ${RABBITMQ_NOTIFICATION_DLQ_ROUTING_KEY}
+
+streak:
+  fcm-simulator:
+    url: http://100.82.71.69:8080/test/fcm/send
