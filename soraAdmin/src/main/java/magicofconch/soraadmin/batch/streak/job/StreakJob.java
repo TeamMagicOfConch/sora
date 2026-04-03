@@ -14,7 +14,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import lombok.RequiredArgsConstructor;
 import magicOfConch.dto.FcmRequest;
-import magicOfConch.dto.UserStreakItem;
+import magicofconch.soraadmin.batch.streak.dto.UserStreakItem;
 import magicofconch.soraadmin.batch.streak.listener.ChunkTimingListener;
 import magicofconch.soraadmin.batch.streak.listener.StreakJobListener;
 

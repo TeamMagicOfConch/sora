@@ -17,7 +17,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.extern.slf4j.Slf4j;
 import magicOfConch.user.UserInfo;
-import magicOfConch.dto.UserStreakItem;
+import magicofconch.soraadmin.batch.streak.dto.UserStreakItem;
 
 @Slf4j
 @Component

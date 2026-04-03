@@ -1,4 +1,4 @@
-package magicOfConch.dto;
+package magicofconch.soraadmin.batch.streak.dto;
 
 import java.time.LocalDate;
 
