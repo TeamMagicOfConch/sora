@@ -4,4 +4,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FcmNotificationWorker {
+
+	public void consumeAndSendFcm() {
+
+	}
+
 }
