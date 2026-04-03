@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import magicOfConch.enums.OsType;
 import magicOfConch.user.StreakInfo;
 import magicOfConch.user.UserInfo;
-import magicofconch.soraadmin.batch.streak.dto.FcmRequest;
+import magicOfConch.dto.FcmRequest;
 import magicofconch.soraadmin.batch.streak.dto.UserStreakItem;
 import magicofconch.soraadmin.util.FcmUtil;
 

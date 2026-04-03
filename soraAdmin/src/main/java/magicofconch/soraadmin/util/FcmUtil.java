@@ -11,7 +11,7 @@ import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 
 import lombok.RequiredArgsConstructor;
-import magicofconch.soraadmin.batch.streak.dto.FcmRequest;
+import magicOfConch.dto.FcmRequest;
 
 @Component
 @RequiredArgsConstructor

@@ -1,0 +1,29 @@
+sequenceDiagram
+    autonumber
+    participant SCH as Scheduler
+    participant PRE as Preload Job (HH:05)
+    participant DB as MySQL
+    participant C as Cache
+    participant DIS as Dispatch Job (HH:10)
+    participant FCM as Firebase FCM
+
+    SCH->>PRE: HH:05 preload trigger
+    PRE->>DB: 대상자 조회 (HH:10 슬롯)
+    DB-->>PRE: 대상자 목록
+    PRE->>C: slot key로 캐시 저장 (TTL 설정)
+    PRE-->>SCH: preload 완료 메트릭/로그
+
+    SCH->>DIS: HH:10 dispatch trigger
+    DIS->>C: slot 캐시 조회
+    alt cache hit
+        C-->>DIS: 대상자 목록 반환
+    else cache miss
+        DIS->>DB: fallback 조회
+        DB-->>DIS: 대상자 목록 반환
+    end
+    DIS->>DIS: 최종 검증(옵트인/토큰/멱등키)
+    loop 대상자별 전송
+        DIS->>FCM: send request
+        FCM-->>DIS: success/fail
+    end
+    DIS-->>SCH: 완료(성공/실패/지연 메트릭)

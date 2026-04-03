@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: batch-worker
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:sora}
+    password: ${RABBITMQ_PASSWORD:sora1234}

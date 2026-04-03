@@ -6,7 +6,7 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import magicofconch.soraadmin.batch.streak.dto.FcmRequest;
+import magicOfConch.dto.FcmRequest;
 import magicofconch.soraadmin.config.RabbitMQConfig;
 
 @Component

@@ -19,7 +19,7 @@ import magicOfConch.enums.UserRole;
 import magicOfConch.user.OsAuthInfo;
 import magicOfConch.user.StreakInfo;
 import magicOfConch.user.UserInfo;
-import magicofconch.soraadmin.batch.streak.dto.FcmRequest;
+import magicOfConch.dto.FcmRequest;
 import magicofconch.soraadmin.batch.streak.dto.UserStreakItem;
 import magicofconch.soraadmin.batch.streak.processor.StreakProcessor;
 import magicofconch.soraadmin.util.FcmUtil;
