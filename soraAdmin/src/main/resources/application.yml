@@ -12,8 +12,8 @@ spring:
   jpa:
     properties:
       hibernate:
-        generate_statistics: true
-        show_sql: true
+        generate_statistics: false
+        show_sql: false
         format_sql: true
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
@@ -31,6 +31,12 @@ spring:
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
+    cache:
+      channel:
+        size: 25
+      connection:
+        mode: connection
+        size: ${BATCH_PARTITION_GRID_SIZE:1}
 
 rabbitmq:
   notification:
@@ -39,6 +45,10 @@ rabbitmq:
     dlq: ${RABBITMQ_NOTIFICATION_DLQ}
     routing-key: ${RABBITMQ_NOTIFICATION_ROUTING_KEY}
     dlq-routing-key: ${RABBITMQ_NOTIFICATION_DLQ_ROUTING_KEY}
+
+batch:
+  partition:
+    grid-size: ${BATCH_PARTITION_GRID_SIZE}
 
 encryption:
   algorithm: AES
