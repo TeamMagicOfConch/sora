@@ -33,6 +33,7 @@ public class StreakKeySetReader implements ItemStreamReader<UserStreakItem> {
 		+ "WHERE si.reviewAt >= :start "
 		+ "AND si.reviewAt < :end "
 		+ "AND u.id > :lastId "
+		+ "AND u.id <= :maxId "
 		+ "ORDER BY u.id";
 
 	// 2단계: ID 목록으로 엔티티 + 연관관계 fetch
@@ -50,6 +51,12 @@ public class StreakKeySetReader implements ItemStreamReader<UserStreakItem> {
 	@Value("#{jobExecutionContext['alertTime']}")
 	private LocalDateTime alertTime;
 
+	@Value("#{stepExecutionContext['minId'] ?: 0}")
+	private long minId;
+
+	@Value("#{stepExecutionContext['maxId'] ?: 9223372036854775807L}")
+	private long maxId;
+
 	private long lastId = 0;
 	private Iterator<UserStreakItem> buffer;
 	private boolean exhausted = false;
@@ -63,7 +70,10 @@ public class StreakKeySetReader implements ItemStreamReader<UserStreakItem> {
 		if (executionContext.containsKey(LAST_ID_KEY)) {
 			lastId = executionContext.getLong(LAST_ID_KEY);
 			log.info("Restarting from lastId={}", lastId);
+		} else {
+			lastId = minId > 0 ? minId - 1 : 0;
 		}
+		log.info("Reader opened: minId={}, maxId={}, lastId={}", minId, maxId, lastId);
 	}
 
 	@Override
@@ -114,6 +124,7 @@ public class StreakKeySetReader implements ItemStreamReader<UserStreakItem> {
 				.setParameter("start", start)
 				.setParameter("end", end)
 				.setParameter("lastId", lastId)
+				.setParameter("maxId", maxId)
 				.setMaxResults(PAGE_SIZE)
 				.getResultList();
 
