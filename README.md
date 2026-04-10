@@ -23,11 +23,11 @@
 
 🐚 소라의 마법에서는 사용자가 작성한 회고 내용에 대해 **AI Agent**인 소라가 응답을 제공합니다. 내가 원하는 **성격**의 소라와 이야기를 하다 보면, 마법처럼 **회고 습관을 쉽고 재미있게** 그리고 확실하게 만들 수 있을 거예요!
 
-<a href="https://magicofconch.notion.site/fae88808dbe2490ca833fb4ef6cc49c1?pvs=74"> 서비스 공식 페이지 </a> 
+<a href="https://magicofconch.notion.site/fae88808dbe2490ca833fb4ef6cc49c1?pvs=74"> 서비스 공식 페이지 </a>
 
 # 🎈 주요 기능
 
-## 회고 작성 및 AI 리뷰 
+## 회고 작성 및 AI 리뷰
 
 <table>
   <tr>
@@ -40,13 +40,23 @@
       리뷰는 LLM을 통해서 스트리밍 됩니다. <br>
     </td>
   </tr>
+
+  <tr>
+    <td>
+      <img src="./readme/CalendarView.gif" width="300">
+    </td>
+    <td>
+      작성한 회고를 캘린더뷰 형태로 제공합니다. <br>
+      사용자가 작성한 회고와 리뷰 타입에 대해서 고동의 색깔이 다르게 디스플레이됩니다. <br>
+      월별로 몇번의 회고를 작성했는지 확인할 수 있습니다. <br>
+    </td>
+  </tr>
 </table>
 
-
 ## 기술 스택 & 아키텍처
+
 ![architecture](./readme/architecture.png)
 
 ## ERD 설계
+
 ![erd](./readme/sora-erd.png)
-
-
