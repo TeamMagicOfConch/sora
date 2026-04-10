@@ -43,7 +43,7 @@
 
   <tr>
     <td>
-      <img src="./readme/CalendarView.gif" width="300">
+      <img src="./readme/CalendarView.png" width="300">
     </td>
     <td>
       작성한 회고를 캘린더뷰 형태로 제공합니다. <br>
