@@ -3,7 +3,7 @@
 <table align="center">
   <tr>
     <td> <img src="./readme/icon.png" width="30px"> </td>
-    <td> <h1>COMAtching</h1> </td>
+    <td> <h1>MagicOfConch</h1> </td>
     <td> <img src="./readme/icon.png" width="30px"> </td>
   </tr>
 </table>
