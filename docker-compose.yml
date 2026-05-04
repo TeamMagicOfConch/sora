@@ -49,6 +49,33 @@ services:
     environment:
       TZ: Asia/Seoul
 
+  batch-worker:
+    container_name: sora-batch-worker
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    depends_on:
+      - rabbitmq
+    env_file:
+      - .env
+    networks:
+      - sora-network
+    environment:
+      TZ: Asia/Seoul
+
+  rabbitmq:
+    container_name: sora-rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - "${PORT_RABBITMQ:-5672}:5672"
+      - "${PORT_RABBITMQ_MANAGEMENT:-15672}:15672"
+    environment:
+      TZ: Asia/Seoul
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    networks:
+      - sora-network
+
   mysql:
     container_name: sora-mysql
     image: mysql:8.0

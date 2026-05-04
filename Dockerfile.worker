@@ -1,0 +1,9 @@
+FROM gradle:8.5-jdk17 AS build
+WORKDIR /build
+COPY . .
+RUN gradle :batch-worker:bootJar
+
+FROM eclipse-temurin:17-jdk-jammy
+WORKDIR /app
+COPY --from=build /build/batch-worker/build/libs/batch-worker-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-Dspring.profiles.active=docker", "-jar", "app.jar"]

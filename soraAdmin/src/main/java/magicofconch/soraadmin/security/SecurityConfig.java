@@ -42,7 +42,8 @@ public class SecurityConfig {
 					"/v3/api-docs",
 					"/swagger-resources/**",
 					"/webjars/**",
-					"/test/**"
+					"/test/**",
+					"/actuator/**"
 				).permitAll()
 				.requestMatchers("/admin/api/login", "/admin/api/signup").permitAll()
 				.requestMatchers("/admin/**").hasRole("ADMIN")

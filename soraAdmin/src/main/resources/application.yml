@@ -12,6 +12,7 @@ spring:
   jpa:
     properties:
       hibernate:
+        generate_statistics: false
         show_sql: false
         format_sql: true
     database-platform: org.hibernate.dialect.MySQLDialect
@@ -25,6 +26,29 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
 
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+    cache:
+      channel:
+        size: 25
+      connection:
+        mode: connection
+        size: ${BATCH_PARTITION_GRID_SIZE:1}
+
+rabbitmq:
+  notification:
+    exchange: ${RABBITMQ_NOTIFICATION_EXCHANGE}
+    queue: ${RABBITMQ_NOTIFICATION_QUEUE}
+    dlq: ${RABBITMQ_NOTIFICATION_DLQ}
+    routing-key: ${RABBITMQ_NOTIFICATION_ROUTING_KEY}
+    dlq-routing-key: ${RABBITMQ_NOTIFICATION_DLQ_ROUTING_KEY}
+
+batch:
+  partition:
+    grid-size: ${BATCH_PARTITION_GRID_SIZE}
 
 encryption:
   algorithm: AES
@@ -33,6 +57,15 @@ encryption:
   iv-size: 12
   tag-length: 128
   secret: ${AES_SECRET}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,metrics
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 springdoc:
   swagger-ui:
